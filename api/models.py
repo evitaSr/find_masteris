@@ -29,9 +29,9 @@ class Service(models.Model):
 
 
 class User(models.Model):
-    username = models.CharField(max_length=100, verbose_name=_('Username'), unique=True)
-    password = models.CharField(max_length=255, verbose_name=_('Password'))
-    email = models.EmailField(max_length=255, verbose_name=_('Email'))
+    username = models.CharField(max_length=100, verbose_name=_('Username'), unique=True, blank=False)
+    password = models.CharField(max_length=255, verbose_name=_('Password'), blank=False)
+    email = models.EmailField(max_length=255, verbose_name=_('Email'), blank=False)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -43,7 +43,7 @@ class User(models.Model):
 class Handyman(User):
     first_name = models.CharField(max_length=100, verbose_name=_('First Name'))
     last_name = models.CharField(max_length=100, verbose_name=_('Last Name'))
-    contact_email = models.CharField(max_length=255, verbose_name=_('Contact email'))
+    contact_email = models.EmailField(max_length=255, verbose_name=_('Contact email'))
     phone_no = models.CharField(max_length=20, verbose_name=_('Phone No'), null=True, blank=True, default=None)
     website = models.CharField(max_length=255, verbose_name=_('Website'), null=True, blank=True, default=None)
 

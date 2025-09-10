@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.models import Category, Service
-from api.serializers import CategorySerializer, ServiceSerializer
+from api.models import Category, Service, User, Handyman
+from api.serializers import CategorySerializer, ServiceSerializer, UserSerializer, HandymanSerializer
 
 
 class CategoryView(APIView):
@@ -95,3 +95,94 @@ class ServiceDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class UserView(APIView):
+    def get(self, request):
+        items = User.objects.all()
+        serializer = UserSerializer(items, many=True)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=UserSerializer)
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserDetailView(APIView):
+    def get(self, request, pk):
+        try:
+            user = User.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=UserSerializer)
+    def patch(self, request, pk):
+        try:
+            user = User.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            user = User.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class HandymanView(APIView):
+    def get(self, request):
+        items = Handyman.objects.all()
+        serializer = HandymanSerializer(items, many=True)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=HandymanSerializer)
+    def post(self, request):
+        serializer = HandymanSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class HandymanDetailView(APIView):
+    def get(self, request, pk):
+        try:
+            handyman = Handyman.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = HandymanSerializer(handyman)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=HandymanSerializer)
+    def patch(self, request, pk):
+        try:
+            handyman = Handyman.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = HandymanSerializer(handyman, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            handyman = Handyman.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        handyman.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
