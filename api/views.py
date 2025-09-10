@@ -4,8 +4,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.models import Category, Service, User, Handyman, Client
-from api.serializers import CategorySerializer, ServiceSerializer, UserSerializer, HandymanSerializer, ClientSerializer
+from api.models import Category, Service, User, Handyman, Client, JobEntry, Review
+from api.serializers import CategorySerializer, ServiceSerializer, UserSerializer, HandymanSerializer, ClientSerializer, \
+    JobEntrySerializer, ReviewSerializer
 
 
 class CategoryView(APIView):
@@ -50,6 +51,7 @@ class CategoryDetailView(APIView):
         if serializer.is_valid():
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ServiceView(APIView):
     def get(self, request):
@@ -230,4 +232,93 @@ class ClientDetailView(APIView):
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         client.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class JobEntryView(APIView):
+    def get(self, request):
+        items = JobEntry.objects.all()
+        serializer = JobEntrySerializer(items, many=True)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=JobEntrySerializer)
+    def post(self, request):
+        serializer = JobEntrySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class JobEntryDetailView(APIView):
+    def get(self, request, pk):
+        try:
+            entry = JobEntry.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = JobEntrySerializer(entry)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=JobEntrySerializer)
+    def patch(self, request, pk):
+        try:
+            entry = JobEntry.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = JobEntrySerializer(entry, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            entry = JobEntry.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        entry.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ReviewView(APIView):
+    def get(self, request):
+        items = Review.objects.all()
+        serializer = ReviewSerializer(items, many=True)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=ReviewSerializer)
+    def post(self, request):
+        serializer = ReviewSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class ReviewDetailView(APIView):
+    def get(self, request, pk):
+        try:
+            review = Review.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = ReviewSerializer(review)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=ReviewSerializer)
+    def patch(self, request, pk):
+        try:
+            review = Review.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = ReviewSerializer(review, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            review = Review.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        review.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
