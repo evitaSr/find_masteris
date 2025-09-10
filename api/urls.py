@@ -1,7 +1,7 @@
 from django.urls import path
 
 from api.views import CategoryView, CategoryDetailView, ServiceView, ServiceDetailView, UserView, UserDetailView, \
-    HandymanView, HandymanDetailView
+    HandymanView, HandymanDetailView, ClientView, ClientDetailView
 
 urlpatterns = [
     path('category/', CategoryView.as_view(), name='category'),
@@ -12,4 +12,6 @@ urlpatterns = [
     path('user/<int:pk>', UserDetailView.as_view(), name='user-detail'),
     path('handyman/', HandymanView.as_view(), name='handyman'),
     path('handyman/<int:pk>', HandymanDetailView.as_view(), name='handyman-detail'),
+    path('client/', ClientView.as_view(), name='client'),
+    path('client/<int:pk>', ClientDetailView.as_view(), name='client-detail'),
 ]

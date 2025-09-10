@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import Category, Service, User, Handyman
+from api.models import Category, Service, User, Handyman, Client
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -29,3 +29,9 @@ class HandymanSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True},
         }
+
+class ClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = ['pk', 'username', 'password', 'email', 'is_admin', 'is_active', 'created_on', ]
+        extra_kwargs = {'password': {'write_only': True}}
