@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.models import Category, Service, User, Handyman, Client, JobEntry, Review
-from api.serializers import CategorySerializer, ServiceSerializer, UserSerializer, HandymanSerializer, ClientSerializer, \
+from api.models import Category, Service, User, Handyman, JobEntry, Review
+from api.serializers import CategorySerializer, ServiceSerializer, UserSerializer, HandymanSerializer, \
     JobEntrySerializer, ReviewSerializer
 
 
@@ -187,51 +187,6 @@ class HandymanDetailView(APIView):
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         handyman.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class ClientView(APIView):
-    def get(self, request):
-        items = Client.objects.all()
-        serializer = ClientSerializer(items, many=True)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(request_body=ClientSerializer)
-    def post(self, request):
-        serializer = ClientSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ClientDetailView(APIView):
-    def get(self, request, pk):
-        try:
-            client = Client.objects.get(pk=pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ClientSerializer(client)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(request_body=ClientSerializer)
-    def patch(self, request, pk):
-        try:
-            client = Client.objects.get(pk=pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ClientSerializer(client, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk):
-        try:
-            client = Client.objects.get(pk=pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        client.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
