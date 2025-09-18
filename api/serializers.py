@@ -17,14 +17,14 @@ class ServiceSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['pk', 'username', 'password', 'email', 'is_admin', 'is_active', 'created_on', ]
+        fields = ['pk', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', ]
         extra_kwargs = {'password': {'write_only': True}}
 
 
 class HandymanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Handyman
-        fields = ['pk', 'username', 'password', 'email', 'is_admin', 'is_active', 'created_on', 'first_name',
+        fields = ['pk', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', 'first_name',
                   'last_name', 'contact_email', 'phone_no', 'website', ]
         extra_kwargs = {
             'password': {'write_only': True},
