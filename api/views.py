@@ -190,6 +190,55 @@ class HandymanDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class HandymanDetailCategoryView(APIView):
+    def get(self, request, pk):
+        try:
+            handyman = Handyman.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Handyman not found'}, status=status.HTTP_404_NOT_FOUND)
+        categories = Category.objects.filter(service__jobentry__handyman=handyman)
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data)
+
+class HandymanDetailCategoryServicesView(APIView):
+    def get(self, request, handyman_pk, category_pk):
+        try:
+            handyman = Handyman.objects.get(pk=handyman_pk)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Handyman not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            category = Category.objects.get(pk=category_pk)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        services = Service.objects.filter(category=category, jobentry__handyman=handyman)
+        serializer = ServiceSerializer(services, many=True)
+        return Response(serializer.data)
+
+
+class HandymanDetailJobEntriesView(APIView):
+    def get(self, request, handyman_pk, category_pk, service_pk):
+        try:
+            handyman = Handyman.objects.get(pk=handyman_pk)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Handyman not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            category = Category.objects.get(pk=category_pk)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            service = Service.objects.get(pk=service_pk, category=category)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Service not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        job_entries = handyman.jobentry_set.filter(service=service)
+        serializer = JobEntrySerializer(job_entries, many=True)
+        return Response(serializer.data)
+
+
 class JobEntryView(APIView):
     def get(self, request):
         items = JobEntry.objects.all()

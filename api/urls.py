@@ -2,7 +2,7 @@ from django.urls import path
 
 from api.views import CategoryView, CategoryDetailView, ServiceView, ServiceDetailView, UserView, UserDetailView, \
     HandymanView, HandymanDetailView, JobEntryView, JobEntryDetailView, ReviewView, \
-    ReviewDetailView
+    ReviewDetailView, HandymanDetailCategoryView, HandymanDetailCategoryServicesView, HandymanDetailJobEntriesView
 
 urlpatterns = [
     path('category/', CategoryView.as_view(), name='category'),
@@ -17,4 +17,9 @@ urlpatterns = [
     path('job_entry/<int:pk>/', JobEntryDetailView.as_view(), name='job-entry-detail'),
     path('review/', ReviewView.as_view(), name='review'),
     path('review/<int:pk>/', ReviewDetailView.as_view(), name='review-detail'),
+    path('handyman/<int:pk>/category/', HandymanDetailCategoryView.as_view(), name='handyman-category'),
+    path('handyman/<int:handyman_pk>/category/<int:category_pk>/service/', HandymanDetailCategoryServicesView.as_view(),
+         name='handyman-category-service'),
+    path('handyman/<int:handyman_pk>/category/<int:category_pk>/service/<int:service_pk>/job_entry/',
+         HandymanDetailJobEntriesView.as_view(), name='handyman-job-entry'),
 ]
