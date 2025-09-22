@@ -74,6 +74,7 @@ class ServiceView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ServiceDetailView(APIView):
     @swagger_auto_schema(tags=['service'])
     def get(self, request, pk, category_pk):
@@ -280,7 +281,7 @@ class HandymanDetailJobEntriesView(APIView):
     def get(self, request, handyman_pk, category_pk, service_pk, pk):
         try:
             job_entry = JobEntry.objects.get(handyman_id=handyman_pk, service__category_id=category_pk,
-                                                service_id=service_pk, pk=pk)
+                                             service_id=service_pk, pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'Job entry not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = JobEntrySerializer(job_entry)
@@ -290,7 +291,7 @@ class HandymanDetailJobEntriesView(APIView):
     def patch(self, request, handyman_pk, category_pk, service_pk, pk):
         try:
             job_entry = JobEntry.objects.get(handyman_id=handyman_pk, service__category_id=category_pk,
-                                                service_id=service_pk, pk=pk)
+                                             service_id=service_pk, pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'Job entry not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = JobEntrySerializer(job_entry, data=request.data, partial=True)
@@ -303,7 +304,7 @@ class HandymanDetailJobEntriesView(APIView):
     def delete(self, request, handyman_pk, category_pk, service_pk, pk):
         try:
             job_entry = JobEntry.objects.get(handyman_id=handyman_pk, service__category_id=category_pk,
-                                                service_id=service_pk, pk=pk)
+                                             service_id=service_pk, pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'Job entry not found'}, status=status.HTTP_404_NOT_FOUND)
 

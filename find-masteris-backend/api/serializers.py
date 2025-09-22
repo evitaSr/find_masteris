@@ -39,7 +39,7 @@ class HandymanSerializer(serializers.ModelSerializer):
 class JobEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = JobEntry
-        fields = ['pk', 'title', 'description', 'service', 'handyman',]
+        fields = ['pk', 'title', 'description', 'service', 'handyman', ]
         read_only_fields = ['service', 'handyman']
 
     def create(self, validated_data):
@@ -58,12 +58,11 @@ class JobEntrySerializer(serializers.ModelSerializer):
         return instance
 
 
-
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ['pk', 'rating', 'description', 'created_on', 'handyman', 'service', 'client',]
-        read_only_fields = ['handyman', 'service',]
+        fields = ['pk', 'rating', 'description', 'created_on', 'handyman', 'service', 'client', ]
+        read_only_fields = ['handyman', 'service', ]
 
     def create(self, validated_data):
         handyman = self.context['handyman']
