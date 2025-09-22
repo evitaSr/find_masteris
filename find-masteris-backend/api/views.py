@@ -54,41 +54,52 @@ class CategoryDetailView(APIView):
 
 
 class ServiceView(APIView):
-    def get(self, request):
-        items = Service.objects.all()
+    @swagger_auto_schema(tags=['service'])
+    def get(self, request, category_pk):
+        if not Category.objects.filter(pk=category_pk).exists():
+            return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+        items = Service.objects.filter(category_id=category_pk)
         serializer = ServiceSerializer(items, many=True)
         return Response(serializer.data)
 
-    @swagger_auto_schema(request_body=ServiceSerializer)
-    def post(self, request):
-        serializer = ServiceSerializer(data=request.data)
+    @swagger_auto_schema(request_body=ServiceSerializer, tags=['service'])
+    def post(self, request, category_pk):
+        try:
+            category = Category.objects.get(pk=category_pk)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = ServiceSerializer(data=request.data, context={'category': category})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class ServiceDetailView(APIView):
-    def get(self, request, pk):
+    @swagger_auto_schema(tags=['service'])
+    def get(self, request, pk, category_pk):
         try:
-            service = Service.objects.get(pk=pk)
+            service = Service.objects.get(pk=pk, category_id=category_pk)
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = ServiceSerializer(service)
         return Response(serializer.data)
 
-    def delete(self, request, pk):
+    @swagger_auto_schema(tags=['service'])
+    def delete(self, request, pk, category_pk):
         try:
-            service = Service.objects.get(pk=pk)
+            service = Service.objects.get(pk=pk, category_id=category_pk)
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         service.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @swagger_auto_schema(request_body=ServiceSerializer)
-    def patch(self, request, pk):
+    @swagger_auto_schema(
+        tags=['service'],
+        request_body=ServiceSerializer
+    )
+    def patch(self, request, pk, category_pk):
         try:
-            service = Service.objects.get(pk=pk)
+            service = Service.objects.get(pk=pk, category_id=category_pk)
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = ServiceSerializer(service, data=request.data, partial=True)

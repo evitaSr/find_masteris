@@ -12,6 +12,11 @@ class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = ['pk', 'title', 'category', ]
+        read_only_fields = ['category', ]
+
+    def create(self, validated_data):
+        category = self.context['category']
+        return Service.objects.create(category=category, **validated_data)
 
 
 class UserSerializer(serializers.ModelSerializer):
