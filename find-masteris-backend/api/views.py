@@ -230,6 +230,7 @@ class HandymanDetailCategoryServicesView(APIView):
 
 
 class HandymanJobEntriesView(APIView):
+    @swagger_auto_schema(tags=['job_entry'])
     def get(self, request, handyman_pk, category_pk, service_pk):
         try:
             handyman = Handyman.objects.get(pk=handyman_pk)
@@ -250,7 +251,7 @@ class HandymanJobEntriesView(APIView):
         serializer = JobEntrySerializer(job_entries, many=True)
         return Response(serializer.data)
 
-    @swagger_auto_schema(request_body=JobEntrySerializer)
+    @swagger_auto_schema(request_body=JobEntrySerializer, tags=['job_entry'])
     def post(self, request, handyman_pk, category_pk, service_pk):
         try:
             handyman = Handyman.objects.get(pk=handyman_pk)
@@ -275,11 +276,21 @@ class HandymanJobEntriesView(APIView):
 
 
 class HandymanDetailJobEntriesView(APIView):
-    @swagger_auto_schema(request_body=JobEntrySerializer)
+    @swagger_auto_schema(tags=['job_entry'])
+    def get(self, request, handyman_pk, category_pk, service_pk, pk):
+        try:
+            job_entry = JobEntry.objects.get(handyman_id=handyman_pk, service__category_id=category_pk,
+                                                service_id=service_pk, pk=pk)
+        except ObjectDoesNotExist:
+            return Response({'error': 'Job entry not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = JobEntrySerializer(job_entry)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(request_body=JobEntrySerializer, tags=['job_entry'])
     def patch(self, request, handyman_pk, category_pk, service_pk, pk):
         try:
-            job_entry = JobEntry.objects.filter(handyman_id=handyman_pk, service__category_id=category_pk,
-                                                service_id=service_pk, pk=pk).first()
+            job_entry = JobEntry.objects.get(handyman_id=handyman_pk, service__category_id=category_pk,
+                                                service_id=service_pk, pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'Job entry not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = JobEntrySerializer(job_entry, data=request.data, partial=True)
@@ -288,59 +299,15 @@ class HandymanDetailJobEntriesView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @swagger_auto_schema(tags=['job_entry'])
     def delete(self, request, handyman_pk, category_pk, service_pk, pk):
         try:
-            job_entry = JobEntry.objects.filter(handyman_id=handyman_pk, service__category_id=category_pk,
-                                                service_id=service_pk, pk=pk).first()
+            job_entry = JobEntry.objects.get(handyman_id=handyman_pk, service__category_id=category_pk,
+                                                service_id=service_pk, pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'Job entry not found'}, status=status.HTTP_404_NOT_FOUND)
 
         job_entry.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class JobEntryView(APIView):
-    def get(self, request):
-        items = JobEntry.objects.all()
-        serializer = JobEntrySerializer(items, many=True)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(request_body=JobEntrySerializer)
-    def post(self, request):
-        serializer = JobEntrySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class JobEntryDetailView(APIView):
-    def get(self, request, pk):
-        try:
-            entry = JobEntry.objects.get(pk=pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = JobEntrySerializer(entry)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(request_body=JobEntrySerializer)
-    def patch(self, request, pk):
-        try:
-            entry = JobEntry.objects.get(pk=pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = JobEntrySerializer(entry, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk):
-        try:
-            entry = JobEntry.objects.get(pk=pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        entry.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
