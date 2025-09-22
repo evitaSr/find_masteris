@@ -58,3 +58,13 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ['pk', 'rating', 'description', 'created_on', 'handyman', 'service', 'client',]
+        read_only_fields = ['handyman', 'service',]
+
+    def create(self, validated_data):
+        handyman = self.context['handyman']
+        service = self.context['service']
+        return Review.objects.create(
+            handyman=handyman,
+            service=service,
+            **validated_data,
+        )
