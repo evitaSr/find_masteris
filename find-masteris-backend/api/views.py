@@ -344,51 +344,8 @@ class JobEntryDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ReviewView(APIView):
-    def get(self, request):
-        items = Review.objects.all()
-        serializer = ReviewSerializer(items, many=True)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(request_body=ReviewSerializer)
-    def post(self, request):
-        serializer = ReviewSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-class ReviewDetailView(APIView):
-    def get(self, request, pk):
-        try:
-            review = Review.objects.get(pk=pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ReviewSerializer(review)
-        return Response(serializer.data)
-
-    @swagger_auto_schema(request_body=ReviewSerializer)
-    def patch(self, request, pk):
-        try:
-            review = Review.objects.get(pk=pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ReviewSerializer(review, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk):
-        try:
-            review = Review.objects.get(pk=pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        review.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
 class HandymanReviewView(APIView):
+    @swagger_auto_schema(tags=['review'])
     def get(self, request, handyman_pk, category_pk, service_pk):
         try:
             handyman = Handyman.objects.get(pk=handyman_pk)
@@ -409,7 +366,7 @@ class HandymanReviewView(APIView):
         reviews_serializer = ReviewSerializer(reviews, many=True)
         return Response(reviews_serializer.data)
 
-    @swagger_auto_schema(request_body=ReviewSerializer)
+    @swagger_auto_schema(request_body=ReviewSerializer, tags=['review'])
     def post(self, request, handyman_pk, category_pk, service_pk):
         try:
             handyman = Handyman.objects.get(pk=handyman_pk)
@@ -434,6 +391,7 @@ class HandymanReviewView(APIView):
 
 
 class HandymanReviewDetailView(APIView):
+    @swagger_auto_schema(tags=['review'])
     def get(self, request, handyman_pk, category_pk, service_pk, pk):
         review = self._get_review(handyman_pk, category_pk, service_pk, pk)
         if isinstance(review, Response):
@@ -442,7 +400,7 @@ class HandymanReviewDetailView(APIView):
         serializer = ReviewSerializer(review)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(request_body=ReviewSerializer)
+    @swagger_auto_schema(request_body=ReviewSerializer, tags=['review'])
     def patch(self, request, handyman_pk, category_pk, service_pk, pk):
         review = self._get_review(handyman_pk, category_pk, service_pk, pk)
         if isinstance(review, Response):
@@ -454,6 +412,7 @@ class HandymanReviewDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @swagger_auto_schema(tags=['review'])
     def delete(self, request, handyman_pk, category_pk, service_pk, pk):
         review = self._get_review(handyman_pk, category_pk, service_pk, pk)
         if isinstance(review, Response):
