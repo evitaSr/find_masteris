@@ -58,6 +58,15 @@ class JobEntry(models.Model):
         return self.title
 
 
+class JobEntryFile(models.Model):
+    job_entry = models.ForeignKey(JobEntry, verbose_name=_('Job entry'), on_delete=models.CASCADE, related_name='files')
+    file = models.FileField(verbose_name=_('File'), upload_to='job_entry/files/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.file.url
+
+
 class Review(models.Model):
     rating = models.PositiveIntegerField(verbose_name=_('Rating'),
                                          validators=[MinValueValidator(1), MaxValueValidator(5)])

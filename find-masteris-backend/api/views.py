@@ -269,7 +269,9 @@ class HandymanJobEntriesView(APIView):
         except ObjectDoesNotExist:
             return Response({'error': 'Service not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = JobEntrySerializer(data=request.data, context={'handyman': handyman, 'service': service})
+        serializer = JobEntrySerializer(data=request.data, context={'handyman': handyman, 'service': service,
+                                                                    'uploaded_files': request.FILES.getlist(
+                                                                        'uploaded_files')})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -294,7 +296,7 @@ class HandymanDetailJobEntriesView(APIView):
                                              service_id=service_pk, pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'Job entry not found'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = JobEntrySerializer(job_entry, data=request.data, partial=True)
+        serializer = JobEntrySerializer(job_entry, data=request.data, partial=True, context={'uploaded_files': request.FILES.getlist('uploaded_files')})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
