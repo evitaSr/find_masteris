@@ -217,7 +217,7 @@ class HandymanDetailCategoryView(APIView):
             handyman = Handyman.objects.get(pk=handyman_pk)
         except ObjectDoesNotExist:
             return Response({'error': 'Handyman with id=%s not found' % handyman_pk}, status=status.HTTP_404_NOT_FOUND)
-        categories = Category.objects.filter(service__jobentry__handyman=handyman)
+        categories = Category.objects.filter(service__jobentry__handyman=handyman).distinct()
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data)
 
@@ -232,7 +232,7 @@ class HandymanDetailCategoryServicesView(APIView):
         except Category.DoesNotExist:
             return Response({'error': 'Category with id=%s not found' % category_pk}, status=status.HTTP_404_NOT_FOUND)
 
-        services = Service.objects.filter(category=category, jobentry__handyman=handyman)
+        services = Service.objects.filter(category=category, jobentry__handyman=handyman).distinct()
         serializer = ServiceSerializer(services, many=True)
         return Response(serializer.data)
 
