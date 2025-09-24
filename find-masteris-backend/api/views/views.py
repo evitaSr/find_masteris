@@ -4,9 +4,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.models import Category, Service, User, Handyman, JobEntry, Review
+from api.models import Category, Service, User, Handyman, Review
 from api.serializers import CategorySerializer, ServiceSerializer, UserSerializer, HandymanSerializer, \
     JobEntrySerializer, ReviewSerializer
+from api.views.helpers import get_objs_or_response, get_job_entry_or_response, get_review
 
 
 class CategoryView(APIView):
@@ -29,7 +30,7 @@ class CategoryDetailView(APIView):
         try:
             category = Category.objects.get(pk=pk)
         except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Category with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
         serializer = CategorySerializer(category)
         return Response(serializer.data)
 
@@ -37,7 +38,7 @@ class CategoryDetailView(APIView):
         try:
             category = Category.objects.get(pk=pk)
         except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Category with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -46,7 +47,7 @@ class CategoryDetailView(APIView):
         try:
             category = Category.objects.get(pk=pk)
         except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Category with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
         serializer = CategorySerializer(category, data=request.data, partial=True)
         if serializer.is_valid():
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -57,7 +58,7 @@ class ServiceView(APIView):
     @swagger_auto_schema(tags=['service'])
     def get(self, request, category_pk):
         if not Category.objects.filter(pk=category_pk).exists():
-            return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Category with id=%s not found' % category_pk}, status=status.HTTP_404_NOT_FOUND)
         items = Service.objects.filter(category_id=category_pk)
         serializer = ServiceSerializer(items, many=True)
         return Response(serializer.data)
@@ -67,7 +68,7 @@ class ServiceView(APIView):
         try:
             category = Category.objects.get(pk=category_pk)
         except ObjectDoesNotExist:
-            return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Category with id=%s not found' % category_pk}, status=status.HTTP_404_NOT_FOUND)
         serializer = ServiceSerializer(data=request.data, context={'category': category})
         if serializer.is_valid():
             serializer.save()
@@ -78,19 +79,17 @@ class ServiceView(APIView):
 class ServiceDetailView(APIView):
     @swagger_auto_schema(tags=['service'])
     def get(self, request, pk, category_pk):
-        try:
-            service = Service.objects.get(pk=pk, category_id=category_pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        service = self._get_service_or_response(pk, category_pk)
+        if isinstance(service, Response):
+            return service
         serializer = ServiceSerializer(service)
         return Response(serializer.data)
 
     @swagger_auto_schema(tags=['service'])
     def delete(self, request, pk, category_pk):
-        try:
-            service = Service.objects.get(pk=pk, category_id=category_pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        service = self._get_service_or_response(pk, category_pk)
+        if isinstance(service, Response):
+            return service
         service.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -99,15 +98,25 @@ class ServiceDetailView(APIView):
         request_body=ServiceSerializer
     )
     def patch(self, request, pk, category_pk):
-        try:
-            service = Service.objects.get(pk=pk, category_id=category_pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        service = self._get_service_or_response(pk, category_pk)
+        if isinstance(service, Response):
+            return service
         serializer = ServiceSerializer(service, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def _get_service_or_response(self, pk, category_pk):
+        try:
+            category = Category.objects.get(pk=category_pk)
+            service = Service.objects.get(pk=pk, category=category)
+        except Category.DoesNotExist:
+            return Response({'error': 'Category with id=%s not found' % category_pk}, status=status.HTTP_404_NOT_FOUND)
+        except Service.DoesNotExist:
+            return Response({'error': 'Service with id=%s, of category id=%s, not found' % (pk, category_pk)},
+                            status=status.HTTP_404_NOT_FOUND)
+        return service
 
 
 class UserView(APIView):
@@ -130,7 +139,7 @@ class UserDetailView(APIView):
         try:
             user = User.objects.get(pk=pk)
         except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'User with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
@@ -139,7 +148,7 @@ class UserDetailView(APIView):
         try:
             user = User.objects.get(pk=pk)
         except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'User with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
@@ -151,7 +160,7 @@ class UserDetailView(APIView):
         try:
             user = User.objects.get(pk=pk)
         except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'User with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
 
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -177,7 +186,7 @@ class HandymanDetailView(APIView):
         try:
             handyman = Handyman.objects.get(pk=pk)
         except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Handyman with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
         serializer = HandymanSerializer(handyman)
         return Response(serializer.data)
 
@@ -186,7 +195,7 @@ class HandymanDetailView(APIView):
         try:
             handyman = Handyman.objects.get(pk=pk)
         except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Handyman with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
         serializer = HandymanSerializer(handyman, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -197,17 +206,17 @@ class HandymanDetailView(APIView):
         try:
             handyman = Handyman.objects.get(pk=pk)
         except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Handyman with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
         handyman.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class HandymanDetailCategoryView(APIView):
-    def get(self, request, pk):
+    def get(self, request, handyman_pk):
         try:
-            handyman = Handyman.objects.get(pk=pk)
+            handyman = Handyman.objects.get(pk=handyman_pk)
         except ObjectDoesNotExist:
-            return Response({'error': 'Handyman not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Handyman with id=%s not found' % handyman_pk}, status=status.HTTP_404_NOT_FOUND)
         categories = Category.objects.filter(service__jobentry__handyman=handyman)
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data)
@@ -217,13 +226,11 @@ class HandymanDetailCategoryServicesView(APIView):
     def get(self, request, handyman_pk, category_pk):
         try:
             handyman = Handyman.objects.get(pk=handyman_pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Handyman not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
             category = Category.objects.get(pk=category_pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Handyman.DoesNotExist:
+            return Response({'error': 'Handyman with id=%s not found' % handyman_pk}, status=status.HTTP_404_NOT_FOUND)
+        except Category.DoesNotExist:
+            return Response({'error': 'Category with id=%s not found' % category_pk}, status=status.HTTP_404_NOT_FOUND)
 
         services = Service.objects.filter(category=category, jobentry__handyman=handyman)
         serializer = ServiceSerializer(services, many=True)
@@ -233,20 +240,10 @@ class HandymanDetailCategoryServicesView(APIView):
 class HandymanJobEntriesView(APIView):
     @swagger_auto_schema(tags=['job_entry'])
     def get(self, request, handyman_pk, category_pk, service_pk):
-        try:
-            handyman = Handyman.objects.get(pk=handyman_pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Handyman not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            category = Category.objects.get(pk=category_pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            service = Service.objects.get(pk=service_pk, category=category)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Service not found'}, status=status.HTTP_404_NOT_FOUND)
+        objs_or_response = get_objs_or_response(handyman_pk, category_pk, service_pk)
+        if isinstance(objs_or_response[0], Response):
+            return objs_or_response[0]
+        handyman, service = objs_or_response
 
         job_entries = handyman.jobentry_set.filter(service=service)
         serializer = JobEntrySerializer(job_entries, many=True)
@@ -254,20 +251,10 @@ class HandymanJobEntriesView(APIView):
 
     @swagger_auto_schema(request_body=JobEntrySerializer, tags=['job_entry'])
     def post(self, request, handyman_pk, category_pk, service_pk):
-        try:
-            handyman = Handyman.objects.get(pk=handyman_pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Handyman not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            category = Category.objects.get(pk=category_pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            service = Service.objects.get(pk=service_pk, category=category)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Service not found'}, status=status.HTTP_404_NOT_FOUND)
+        objs_or_response = get_objs_or_response(handyman_pk, category_pk, service_pk)
+        if isinstance(objs_or_response[0], Response):
+            return objs_or_response[0]
+        handyman, service = objs_or_response
 
         serializer = JobEntrySerializer(data=request.data, context={'handyman': handyman, 'service': service,
                                                                     'uploaded_files': request.FILES.getlist(
@@ -281,22 +268,19 @@ class HandymanJobEntriesView(APIView):
 class HandymanDetailJobEntriesView(APIView):
     @swagger_auto_schema(tags=['job_entry'])
     def get(self, request, handyman_pk, category_pk, service_pk, pk):
-        try:
-            job_entry = JobEntry.objects.get(handyman_id=handyman_pk, service__category_id=category_pk,
-                                             service_id=service_pk, pk=pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Job entry not found'}, status=status.HTTP_404_NOT_FOUND)
+        job_entry = get_job_entry_or_response(handyman_pk, category_pk, service_pk, pk)
+        if isinstance(job_entry, Response):
+            return job_entry
         serializer = JobEntrySerializer(job_entry)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(request_body=JobEntrySerializer, tags=['job_entry'])
     def patch(self, request, handyman_pk, category_pk, service_pk, pk):
-        try:
-            job_entry = JobEntry.objects.get(handyman_id=handyman_pk, service__category_id=category_pk,
-                                             service_id=service_pk, pk=pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Job entry not found'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = JobEntrySerializer(job_entry, data=request.data, partial=True, context={'uploaded_files': request.FILES.getlist('uploaded_files')})
+        job_entry = get_job_entry_or_response(handyman_pk, category_pk, service_pk, pk)
+        if isinstance(job_entry, Response):
+            return job_entry
+        serializer = JobEntrySerializer(job_entry, data=request.data, partial=True,
+                                        context={'uploaded_files': request.FILES.getlist('uploaded_files')})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -304,11 +288,9 @@ class HandymanDetailJobEntriesView(APIView):
 
     @swagger_auto_schema(tags=['job_entry'])
     def delete(self, request, handyman_pk, category_pk, service_pk, pk):
-        try:
-            job_entry = JobEntry.objects.get(handyman_id=handyman_pk, service__category_id=category_pk,
-                                             service_id=service_pk, pk=pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Job entry not found'}, status=status.HTTP_404_NOT_FOUND)
+        job_entry = get_job_entry_or_response(handyman_pk, category_pk, service_pk, pk)
+        if isinstance(job_entry, Response):
+            return job_entry
 
         job_entry.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -317,20 +299,10 @@ class HandymanDetailJobEntriesView(APIView):
 class HandymanReviewView(APIView):
     @swagger_auto_schema(tags=['review'])
     def get(self, request, handyman_pk, category_pk, service_pk):
-        try:
-            handyman = Handyman.objects.get(pk=handyman_pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Handyman not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            category = Category.objects.get(pk=category_pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            service = Service.objects.get(pk=service_pk, category=category)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Service not found'}, status=status.HTTP_404_NOT_FOUND)
+        objs_or_response = get_objs_or_response(handyman_pk, category_pk, service_pk)
+        if isinstance(objs_or_response[0], Response):
+            return objs_or_response[0]
+        handyman, service = objs_or_response
 
         reviews = Review.objects.filter(handyman=handyman, service=service)
         reviews_serializer = ReviewSerializer(reviews, many=True)
@@ -338,20 +310,10 @@ class HandymanReviewView(APIView):
 
     @swagger_auto_schema(request_body=ReviewSerializer, tags=['review'])
     def post(self, request, handyman_pk, category_pk, service_pk):
-        try:
-            handyman = Handyman.objects.get(pk=handyman_pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Handyman not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            category = Category.objects.get(pk=category_pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            service = Service.objects.get(pk=service_pk, category=category)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Service not found'}, status=status.HTTP_404_NOT_FOUND)
+        objs_or_response = get_objs_or_response(handyman_pk, category_pk, service_pk)
+        if isinstance(objs_or_response[0], Response):
+            return objs_or_response[0]
+        handyman, service = objs_or_response
 
         serializer = ReviewSerializer(data=request.data, context={'handyman': handyman, 'service': service})
         if serializer.is_valid():
@@ -363,7 +325,7 @@ class HandymanReviewView(APIView):
 class HandymanReviewDetailView(APIView):
     @swagger_auto_schema(tags=['review'])
     def get(self, request, handyman_pk, category_pk, service_pk, pk):
-        review = self._get_review(handyman_pk, category_pk, service_pk, pk)
+        review = get_review(handyman_pk, category_pk, service_pk, pk)
         if isinstance(review, Response):
             return review
 
@@ -372,7 +334,7 @@ class HandymanReviewDetailView(APIView):
 
     @swagger_auto_schema(request_body=ReviewSerializer, tags=['review'])
     def patch(self, request, handyman_pk, category_pk, service_pk, pk):
-        review = self._get_review(handyman_pk, category_pk, service_pk, pk)
+        review = get_review(handyman_pk, category_pk, service_pk, pk)
         if isinstance(review, Response):
             return review
 
@@ -384,30 +346,8 @@ class HandymanReviewDetailView(APIView):
 
     @swagger_auto_schema(tags=['review'])
     def delete(self, request, handyman_pk, category_pk, service_pk, pk):
-        review = self._get_review(handyman_pk, category_pk, service_pk, pk)
+        review = get_review(handyman_pk, category_pk, service_pk, pk)
         if isinstance(review, Response):
             return review
         review.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-    def _get_review(self, handyman_pk, category_pk, service_pk, pk):
-        try:
-            handyman = Handyman.objects.get(pk=handyman_pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Handyman not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            category = Category.objects.get(pk=category_pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Category not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            service = Service.objects.get(pk=service_pk, category=category)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Service not found'}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            review = Review.objects.get(handyman=handyman, service=service, pk=pk)
-        except ObjectDoesNotExist:
-            return Response({'error': 'Review not found'}, status=status.HTTP_404_NOT_FOUND)
-        return review
