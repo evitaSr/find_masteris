@@ -1,6 +1,8 @@
+
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 
@@ -63,6 +65,11 @@ class JobEntryFile(models.Model):
     file = models.FileField(verbose_name=_('File'), upload_to='job_entry/files/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = _('Job entry file')
+        verbose_name_plural = _('Job entry files')
+        ordering = ['uploaded_at',]
+
     def __str__(self):
         return self.file.url
 
@@ -84,3 +91,34 @@ class Review(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.rating, self.description)
+
+
+class RequestToAdd(models.Model):
+    requested_by = models.ForeignKey(Handyman, verbose_name=_('Requested by'), on_delete=models.CASCADE,
+                                     related_name='category_requests')
+    request_sent = models.DateTimeField(verbose_name=_('Request sent at'), default=timezone.now)
+
+
+class RequestToAddCategory(RequestToAdd):
+    title = models.CharField(max_length=100, verbose_name=_('Category title'))
+
+    class Meta:
+        verbose_name = _('Request to add category')
+        verbose_name_plural = _('Requests to add category')
+        ordering = ['request_sent', ]
+
+    def __str__(self):
+        return f'Requested by {self.requested_by.username} to add category {self.title}'
+
+
+class RequestToAddService(RequestToAdd):
+    category = models.ForeignKey(Category, verbose_name=_('Category'), on_delete=models.CASCADE)
+    title = models.CharField(max_length=100, verbose_name=_('Service title'))
+
+    class Meta:
+        verbose_name = _('Request to add service')
+        verbose_name_plural = _('Requests to add service')
+        ordering = ['request_sent', ]
+
+    def __str__(self):
+        return f'Requested by {self.requested_by.username} to add service {self.title}'
