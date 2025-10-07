@@ -389,8 +389,8 @@ class RequestToAddCategoryDetailView(APIView):
         except ObjectDoesNotExist:
             return Response({'error': "Request to add category with id=%s doesnt exist" % pk},
                             status=status.HTTP_404_NOT_FOUND)
-        if Category.objects.filter(title__iexact=request.data['title']).exists():
-            return Response({'error': 'Category with title "%s" already exists' % request.data['title']},
+        if request.data.get('title') and Category.objects.filter(title__iexact=request.data.get('title')).exists():
+            return Response({'error': 'Category with title "%s" already exists' % request.data.get('title')},
                             status=HTTP_422_UNPROCESSABLE_ENTITY)
 
         serializer = RequestToAddCategorySerializer(obj, data=request.data, partial=True)
@@ -420,7 +420,7 @@ class RequestToAddServiceView(APIView):
         serializer = RequestToAddServiceSerializer(data=request.data)
         if Service.objects.filter(title__iexact=request.data['title'], category_id=request.data['category']).exists():
             return Response({'error': 'Service of category %s with title "%s" already exists' % (
-            request.data['category'], request.data['title'])}, status=HTTP_422_UNPROCESSABLE_ENTITY)
+                request.data['category'], request.data['title'])}, status=HTTP_422_UNPROCESSABLE_ENTITY)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -444,9 +444,10 @@ class RequestToAddServiceDetailView(APIView):
         except ObjectDoesNotExist:
             return Response({'error': "Request to add service with id=%s doesn't exist" % pk},
                             status=status.HTTP_404_NOT_FOUND)
-        if Service.objects.filter(title__iexact=request.data['title'], category_id=request.data['category']).exists():
+        if request.data.get('category') and request.data.get('title') and Service.objects.filter(
+                title__iexact=request.data.get('title'), category_id=request.data.get('category')).exists():
             return Response({'error': 'Service of category %s with title "%s" already exists' % (
-            request.data['category'], request.data['title'])}, status=HTTP_422_UNPROCESSABLE_ENTITY)
+                request.data['category'], request.data['title'])}, status=HTTP_422_UNPROCESSABLE_ENTITY)
 
         serializer = RequestToAddServiceSerializer(obj, data=request.data, partial=True)
         if serializer.is_valid():
