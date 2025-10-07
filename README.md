@@ -15,6 +15,7 @@ Neregistruotas sistemos naudotojas galės:
 1. Peržiūrėti platformos reprezentacinį puslapį;
 2. Prisijungti prie sistemos;
 3. Registruotis prie sistemos;
+
 Registruotas klientas galės:
 1. Atsijungti nuo sistemos;
 2. Peržiūrėti meistrus, kurie turi įsikėlę paslaugų pagal pasirinktą kategoriją;
@@ -23,12 +24,14 @@ Registruotas klientas galės:
 3.2. Meistro įkeltus atliktų darbų įrašus pagal kategorijas ir paslaugas;
 3.3. Kiekvieną esantį atsiliepimą, filtruojant pagal dominančią kategoriją bei paslaugą;
 4. Pridėti atsiliepimą apie meistrą, pateikiant, kokios kategorijos paslauga yra vertinama;
+
 Meistras galės:
 1. Atsijungti nuo sistemos;
 2. Užpildyti detalią informaciją apie save;
 3. Valdyti paslaugų įrašus;
 4. Peržiūrėti atsiliepimus apie save;
 5. Siųsti užklausą administratoriui pridėti naują kategoriją arba kategorijos paslaugą;
+
 Administratorius galės:
 1. Atsijungti;
 2. Valdyti priregistruotus naudotojus;
