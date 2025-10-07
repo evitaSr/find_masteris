@@ -1,7 +1,8 @@
 import os
 
 from rest_framework import serializers
-from api.models import Category, Service, User, Handyman, JobEntry, Review, JobEntryFile
+from api.models import Category, Service, User, Handyman, JobEntry, Review, JobEntryFile, RequestToAddCategory, \
+    RequestToAddService
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -98,3 +99,15 @@ class ReviewSerializer(serializers.ModelSerializer):
             service=service,
             **validated_data,
         )
+
+
+class RequestToAddCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RequestToAddCategory
+        fields = ['pk', 'requested_by', 'title', 'is_rejected',]
+
+
+class RequestToAddServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RequestToAddService
+        fields = ['pk', 'requested_by', 'title', 'category', 'is_rejected',]

@@ -2,7 +2,8 @@ from django.urls import path
 
 from api.views.views import CategoryView, CategoryDetailView, ServiceView, ServiceDetailView, UserView, UserDetailView, \
     HandymanView, HandymanDetailView, HandymanDetailCategoryView, HandymanDetailCategoryServicesView, \
-    HandymanJobEntriesView, HandymanDetailJobEntriesView, HandymanReviewView, HandymanReviewDetailView
+    HandymanJobEntriesView, HandymanDetailJobEntriesView, HandymanReviewView, HandymanReviewDetailView, \
+    RequestToAddCategoryView, RequestToAddCategoryDetailView, RequestToAddServiceView, RequestToAddServiceDetailView
 
 urlpatterns = [
     path('category/', CategoryView.as_view(), name='category'),
@@ -24,4 +25,8 @@ urlpatterns = [
          HandymanReviewView.as_view(), name='handyman-review'),
     path('handyman/<int:handyman_pk>/category/<int:category_pk>/service/<int:service_pk>/review/<int:pk>/',
          HandymanReviewDetailView.as_view(), name='handyman-review-detail'),
+    path('category_request/', RequestToAddCategoryView.as_view(), name='request-to-add-category'),
+    path('category_request/<int:pk>/', RequestToAddCategoryDetailView.as_view(), name='request-to-add-category-detail'),
+    path('service_request/', RequestToAddServiceView.as_view(), name='request-to-add-service'),
+    path('service_request/<int:pk>/', RequestToAddServiceDetailView.as_view(), name='request-to-add-service-detail'),
 ]

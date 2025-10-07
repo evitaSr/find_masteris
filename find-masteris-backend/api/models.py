@@ -97,6 +97,7 @@ class RequestToAdd(models.Model):
     requested_by = models.ForeignKey(Handyman, verbose_name=_('Requested by'), on_delete=models.CASCADE,
                                      related_name='category_requests')
     request_sent = models.DateTimeField(verbose_name=_('Request sent at'), default=timezone.now)
+    is_rejected = models.BooleanField(verbose_name=_('Is accepted'), default=False)
 
 
 class RequestToAddCategory(RequestToAdd):

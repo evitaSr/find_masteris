@@ -2,11 +2,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_422_UNPROCESSABLE_ENTITY
 from rest_framework.views import APIView
 
-from api.models import Category, Service, User, Handyman, Review
+from api.models import Category, Service, User, Handyman, Review, RequestToAddCategory, RequestToAddService
 from api.serializers import CategorySerializer, ServiceSerializer, UserSerializer, HandymanSerializer, \
-    JobEntrySerializer, ReviewSerializer
+    JobEntrySerializer, ReviewSerializer, RequestToAddCategorySerializer, RequestToAddServiceSerializer
 from api.views.helpers import get_objs_or_response, get_job_entry_or_response, get_review
 
 
@@ -350,4 +351,114 @@ class HandymanReviewDetailView(APIView):
         if isinstance(review, Response):
             return review
         review.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class RequestToAddCategoryView(APIView):
+    def get(self, request):
+        objs = RequestToAddCategory.objects.filter(is_rejected=False)
+        serializer = RequestToAddCategorySerializer(objs, many=True)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=RequestToAddCategorySerializer)
+    def post(self, request):
+        serializer = RequestToAddCategorySerializer(data=request.data)
+        if Category.objects.filter(title__iexact=request.data['title']).exists():
+            return Response({'error': 'Category with title "%s" already exists' % request.data['title']},
+                            status=HTTP_422_UNPROCESSABLE_ENTITY)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+class RequestToAddCategoryDetailView(APIView):
+    def get(self, request, pk):
+        try:
+            obj = RequestToAddCategory.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response({'error': "Request to add category with id=%s doesnt exist" % pk},
+                            status=status.HTTP_404_NOT_FOUND)
+        serializer = RequestToAddCategorySerializer(obj)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=RequestToAddCategorySerializer)
+    def patch(self, request, pk):
+        try:
+            obj = RequestToAddCategory.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response({'error': "Request to add category with id=%s doesnt exist" % pk},
+                            status=status.HTTP_404_NOT_FOUND)
+        if Category.objects.filter(title__iexact=request.data['title']).exists():
+            return Response({'error': 'Category with title "%s" already exists' % request.data['title']},
+                            status=HTTP_422_UNPROCESSABLE_ENTITY)
+
+        serializer = RequestToAddCategorySerializer(obj, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            obj = RequestToAddCategory.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response({'error': "Request to add category with id=%s doesnt exist" % pk},
+                            status=status.HTTP_404_NOT_FOUND)
+        obj.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class RequestToAddServiceView(APIView):
+    def get(self, request):
+        objs = RequestToAddService.objects.filter(is_rejected=False)
+        serializer = RequestToAddServiceSerializer(objs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(request_body=RequestToAddServiceSerializer)
+    def post(self, request):
+        serializer = RequestToAddServiceSerializer(data=request.data)
+        if Service.objects.filter(title__iexact=request.data['title'], category_id=request.data['category']).exists():
+            return Response({'error': 'Service of category %s with title "%s" already exists' % (
+            request.data['category'], request.data['title'])}, status=HTTP_422_UNPROCESSABLE_ENTITY)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RequestToAddServiceDetailView(APIView):
+    def get(self, request, pk):
+        try:
+            obj = RequestToAddService.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response({'error': "Request to add service with id=%s doesn't exist" % pk},
+                            status=status.HTTP_404_NOT_FOUND)
+        serializer = RequestToAddServiceSerializer(obj)
+        return Response(serializer.data)
+
+    @swagger_auto_schema(request_body=RequestToAddServiceSerializer)
+    def patch(self, request, pk):
+        try:
+            obj = RequestToAddService.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response({'error': "Request to add service with id=%s doesn't exist" % pk},
+                            status=status.HTTP_404_NOT_FOUND)
+        if Service.objects.filter(title__iexact=request.data['title'], category_id=request.data['category']).exists():
+            return Response({'error': 'Service of category %s with title "%s" already exists' % (
+            request.data['category'], request.data['title'])}, status=HTTP_422_UNPROCESSABLE_ENTITY)
+
+        serializer = RequestToAddServiceSerializer(obj, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            obj = RequestToAddService.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response({'error': "Request to add service with id=%s doesn't exist" % pk},
+                            status=status.HTTP_404_NOT_FOUND)
+        obj.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
