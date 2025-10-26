@@ -1,7 +1,10 @@
 import os
 
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
-from api.models import Category, Service, User, Handyman, JobEntry, Review, JobEntryFile, RequestToAddCategory, \
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+from api.models import Category, Service, FindMasterisUser, Handyman, JobEntry, Review, JobEntryFile, RequestToAddCategory, \
     RequestToAddService
 
 
@@ -24,9 +27,17 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['pk', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', ]
+        model = FindMasterisUser
+        fields = ['pk', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', 'role']
         extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data['password'])
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        validated_data['password'] = make_password(validated_data['password'])
+        return super().update(instance, validated_data)
 
 
 class HandymanSerializer(serializers.ModelSerializer):
@@ -111,3 +122,14 @@ class RequestToAddServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = RequestToAddService
         fields = ['pk', 'requested_by', 'title', 'category', 'is_rejected',]
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token['username'] = user.username
+        token['role'] = user.role
+
+        return token

@@ -55,5 +55,17 @@ def get_review(handyman_pk, category_pk, service_pk, pk):
         review = Review.objects.get(handyman=handyman, service=service, pk=pk)
     except ObjectDoesNotExist:
         return Response({'error': 'Review with id=%s of handyman id=%s and service id=%s not found' % (
-        pk, handyman_pk, service_pk)}, status=status.HTTP_404_NOT_FOUND)
+            pk, handyman_pk, service_pk)}, status=status.HTTP_404_NOT_FOUND)
     return review
+
+
+def get_service_or_response(pk, category_pk):
+    try:
+        category = Category.objects.get(pk=category_pk)
+        service = Service.objects.get(pk=pk, category=category)
+    except Category.DoesNotExist:
+        return Response({'error': 'Category with id=%s not found' % category_pk}, status=status.HTTP_404_NOT_FOUND)
+    except Service.DoesNotExist:
+        return Response({'error': 'Service with id=%s, of category id=%s, not found' % (pk, category_pk)},
+                        status=status.HTTP_404_NOT_FOUND)
+    return service

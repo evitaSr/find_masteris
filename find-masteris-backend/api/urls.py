@@ -1,9 +1,11 @@
 from django.urls import path
+from rest_framework_simplejwt.views import TokenRefreshView
 
 from api.views.views import CategoryView, CategoryDetailView, ServiceView, ServiceDetailView, UserView, UserDetailView, \
     HandymanView, HandymanDetailView, HandymanDetailCategoryView, HandymanDetailCategoryServicesView, \
     HandymanJobEntriesView, HandymanDetailJobEntriesView, HandymanReviewView, HandymanReviewDetailView, \
-    RequestToAddCategoryView, RequestToAddCategoryDetailView, RequestToAddServiceView, RequestToAddServiceDetailView
+    RequestToAddCategoryView, RequestToAddCategoryDetailView, RequestToAddServiceView, RequestToAddServiceDetailView, \
+    CustomTokenObtainPairView
 
 urlpatterns = [
     path('category/', CategoryView.as_view(), name='category'),
@@ -29,4 +31,6 @@ urlpatterns = [
     path('category_request/<int:pk>/', RequestToAddCategoryDetailView.as_view(), name='request-to-add-category-detail'),
     path('service_request/', RequestToAddServiceView.as_view(), name='request-to-add-service'),
     path('service_request/<int:pk>/', RequestToAddServiceDetailView.as_view(), name='request-to-add-service-detail'),
+    path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

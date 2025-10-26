@@ -1,5 +1,5 @@
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
@@ -31,7 +31,15 @@ class Service(models.Model):
         return self.title
 
 
-class Handyman(User):
+class FindMasterisUser(AbstractUser):
+    ROLE_CHOICES = (
+        ('admin', 'Admin'),
+        ('handyman', 'Handyman'),
+        ('client', 'Client'),
+    )
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='client', null=True, blank=True, verbose_name='Role')
+
+class Handyman(FindMasterisUser):
     contact_email = models.EmailField(max_length=255, verbose_name=_('Contact email'))
     phone_no = models.CharField(max_length=20, verbose_name=_('Phone No'), null=True, blank=True, default=None)
     website = models.CharField(max_length=255, verbose_name=_('Website'), null=True, blank=True, default=None)
@@ -43,6 +51,10 @@ class Handyman(User):
 
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
+
+    def save(self, *args, **kwargs):
+        self.role = 'handyman'
+        super().save(*args, **kwargs)
 
 
 class JobEntry(models.Model):
@@ -82,7 +94,7 @@ class Review(models.Model):
     handyman = models.ForeignKey(Handyman, verbose_name=_('Handyman'), on_delete=models.CASCADE,
                                  related_name='received_reviews')
     service = models.ForeignKey(Service, verbose_name=_('Service'), on_delete=models.PROTECT)
-    client = models.ForeignKey(User, verbose_name=_('Client'), on_delete=models.CASCADE)
+    client = models.ForeignKey(FindMasterisUser, verbose_name=_('Client'), on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _('Review')

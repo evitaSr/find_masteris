@@ -1,17 +1,21 @@
 from django.core.exceptions import ObjectDoesNotExist
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_422_UNPROCESSABLE_ENTITY
 from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-from api.models import Category, Service, User, Handyman, Review, RequestToAddCategory, RequestToAddService
+from api.models import Category, Service, FindMasterisUser, Handyman, Review, RequestToAddCategory, RequestToAddService
 from api.serializers import CategorySerializer, ServiceSerializer, UserSerializer, HandymanSerializer, \
-    JobEntrySerializer, ReviewSerializer, RequestToAddCategorySerializer, RequestToAddServiceSerializer
-from api.views.helpers import get_objs_or_response, get_job_entry_or_response, get_review
+    JobEntrySerializer, ReviewSerializer, RequestToAddCategorySerializer, RequestToAddServiceSerializer, \
+    CustomTokenObtainPairSerializer
+from api.views.helpers import get_objs_or_response, get_job_entry_or_response, get_review, get_service_or_response
 
 
 class CategoryView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         items = Category.objects.all()
         serializer = CategorySerializer(items, many=True)
@@ -80,7 +84,7 @@ class ServiceView(APIView):
 class ServiceDetailView(APIView):
     @swagger_auto_schema(tags=['service'])
     def get(self, request, pk, category_pk):
-        service = self._get_service_or_response(pk, category_pk)
+        service = get_service_or_response(pk, category_pk)
         if isinstance(service, Response):
             return service
         serializer = ServiceSerializer(service)
@@ -88,18 +92,19 @@ class ServiceDetailView(APIView):
 
     @swagger_auto_schema(tags=['service'])
     def delete(self, request, pk, category_pk):
-        service = self._get_service_or_response(pk, category_pk)
+        service = get_service_or_response(pk, category_pk)
         if isinstance(service, Response):
             return service
         service.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    # FIXME: update
     @swagger_auto_schema(
         tags=['service'],
         request_body=ServiceSerializer
     )
     def patch(self, request, pk, category_pk):
-        service = self._get_service_or_response(pk, category_pk)
+        service = get_service_or_response(pk, category_pk)
         if isinstance(service, Response):
             return service
         serializer = ServiceSerializer(service, data=request.data, partial=True)
@@ -108,21 +113,10 @@ class ServiceDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def _get_service_or_response(self, pk, category_pk):
-        try:
-            category = Category.objects.get(pk=category_pk)
-            service = Service.objects.get(pk=pk, category=category)
-        except Category.DoesNotExist:
-            return Response({'error': 'Category with id=%s not found' % category_pk}, status=status.HTTP_404_NOT_FOUND)
-        except Service.DoesNotExist:
-            return Response({'error': 'Service with id=%s, of category id=%s, not found' % (pk, category_pk)},
-                            status=status.HTTP_404_NOT_FOUND)
-        return service
-
 
 class UserView(APIView):
     def get(self, request):
-        items = User.objects.all()
+        items = FindMasterisUser.objects.all()
         serializer = UserSerializer(items, many=True)
         return Response(serializer.data)
 
@@ -138,7 +132,7 @@ class UserView(APIView):
 class UserDetailView(APIView):
     def get(self, request, pk):
         try:
-            user = User.objects.get(pk=pk)
+            user = FindMasterisUser.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'User with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
         serializer = UserSerializer(user)
@@ -147,7 +141,7 @@ class UserDetailView(APIView):
     @swagger_auto_schema(request_body=UserSerializer)
     def patch(self, request, pk):
         try:
-            user = User.objects.get(pk=pk)
+            user = FindMasterisUser.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'User with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
 
@@ -159,7 +153,7 @@ class UserDetailView(APIView):
 
     def delete(self, request, pk):
         try:
-            user = User.objects.get(pk=pk)
+            user = FindMasterisUser.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'User with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
 
@@ -463,3 +457,7 @@ class RequestToAddServiceDetailView(APIView):
                             status=status.HTTP_404_NOT_FOUND)
         obj.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer

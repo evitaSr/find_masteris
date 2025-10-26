@@ -2,3 +2,4 @@ django
 djangorestframework
 drf_yasg
 mysqlclient
+djangorestframework-simplejwt
