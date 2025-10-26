@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_422_UNPROCESSABLE_ENTITY
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.models import Category, Service, FindMasterisUser, Handyman, Review, RequestToAddCategory, RequestToAddService
@@ -461,3 +462,14 @@ class RequestToAddServiceDetailView(APIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+
+class LogoutView(APIView):
+    def post(self, request):
+        try:
+            refresh_token = request.data['refresh']
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({'detail': 'Logged out successfully'})
+        except Exception:
+            return Response({'error': 'Invalid token'}, status=400)

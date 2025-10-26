@@ -5,7 +5,7 @@ from api.views.views import CategoryView, CategoryDetailView, ServiceView, Servi
     HandymanView, HandymanDetailView, HandymanDetailCategoryView, HandymanDetailCategoryServicesView, \
     HandymanJobEntriesView, HandymanDetailJobEntriesView, HandymanReviewView, HandymanReviewDetailView, \
     RequestToAddCategoryView, RequestToAddCategoryDetailView, RequestToAddServiceView, RequestToAddServiceDetailView, \
-    CustomTokenObtainPairView
+    CustomTokenObtainPairView, LogoutView
 
 urlpatterns = [
     path('category/', CategoryView.as_view(), name='category'),
@@ -33,4 +33,5 @@ urlpatterns = [
     path('service_request/<int:pk>/', RequestToAddServiceDetailView.as_view(), name='request-to-add-service-detail'),
     path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('logout/', LogoutView.as_view(), name='logout')
 ]
