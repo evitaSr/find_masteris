@@ -3,3 +3,6 @@ djangorestframework
 drf_yasg
 mysqlclient
 djangorestframework-simplejwt
+gunicorn
+dj-database-url
+django-environ

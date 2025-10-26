@@ -1,9 +1,9 @@
 /db.sqlite3
 .idea/
 api/__pycache__/
-settings_db.py
 findMasteris/__pycache__/
 __pycache__/
 
 *.pyc
 /media/
+*.env
