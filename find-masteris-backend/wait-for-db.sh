@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-host="${1:-$DATABASE_HOST}"
-port="${DATABASE_PORT:-3306}"
+host="${$DATABASE_HOST}"
+port="${DATABASE_PORT}"
 shift
 cmd="$@"
 
