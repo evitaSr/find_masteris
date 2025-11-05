@@ -1,30 +1,30 @@
 version: '3.9'
 
 services:
-  db:
-    image: mysql:8.0
-    container_name: mysql_db
-    restart: always
-    environment:
-      MYSQL_DATABASE: ${DATABASE_NAME}
-      MYSQL_USER: ${DATABASE_USER}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
+#  db:
+#    image: mysql:8.0
+#    container_name: mysql_db
+#    restart: always
+#    environment:
+#      MYSQL_DATABASE: ${DATABASE_NAME}
+#      MYSQL_USER: ${DATABASE_USER}
+#      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+#      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+#    ports:
+#      - "3306:3306"
+#    volumes:
+#      - mysql_data:/var/lib/mysql
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+#      interval: 5s
+#      timeout: 5s
+#      retries: 10
+#
   web:
     build: .
     container_name: django_app
     command: >
-      /wait-for-db.sh ${DATABASE_HOST} gunicorn findMasteris.wsgi:application
+      /wait-for-db.sh gunicorn findMasteris.wsgi:application
       --bind 0.0.0.0:8000 --workers ${GUNICORN_WORKERS}
     volumes:
       - .:/app
