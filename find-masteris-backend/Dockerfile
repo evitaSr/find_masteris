@@ -20,7 +20,7 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy wait script
 COPY wait-for-db.sh /wait-for-db.sh
-RUN chmod +x /wait-for-db.sh
+RUN chmod +x /app/wait-for-db.sh
 
 # Copy project files
 COPY . /app/
