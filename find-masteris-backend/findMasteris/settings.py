@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # DEBUG = env.bool("DEBUG")
 DEBUG = bool(os.environ.get("DEBUG", default=0))
 # ALLOWED_HOSTS = env("ALLOWED_HOSTS").split(',')
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS","127.0.0.1").split(",")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(",")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -74,13 +74,16 @@ WSGI_APPLICATION = "findMasteris.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": 'django.db.backends.{}'.format(
-             os.getenv('DATABASE_ENGINE', 'sqlite3')
-         ),
+            os.getenv('DATABASE_ENGINE', 'sqlite3')
+        ),
         'NAME': os.getenv('DATABASE_NAME'),
         'USER': os.getenv('DATABASE_USER'),
         'PASSWORD': os.getenv('DATABASE_PASSWORD'),
         'HOST': os.getenv('DATABASE_HOST'),
         'PORT': os.getenv('DATABASE_PORT', 5432),
+        'OPTIONS': {
+            'ssl': {'ca': os.getenv('DATABASE_CERT')}
+        },
     }
 }
 

@@ -24,6 +24,7 @@ RUN chmod +x /wait-for-db.sh
 
 # Copy project files
 COPY . /app/
+COPY ca-certificate.crt /app/ca-certificate.crt
 
 EXPOSE 8000
 
