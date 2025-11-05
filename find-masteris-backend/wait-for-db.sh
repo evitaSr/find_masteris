@@ -12,7 +12,7 @@ echo "DATABASE_PASSWORD=$DATABASE_PASSWORD"
 echo "DATABASE_NAME=$DATABASE_NAME"
 
 # Use full mysql client command with quotes for password
-until mysql --host="$host" --user="$DATABASE_USER" --port=$port --password="$DATABASE_PASSWORD" --database="$DATABASE_NAME" --ssl-mode=VERIFY_CA --ssl-ca=/app/ca-certificate.crt -e 'SELECT 1;' >/dev/null 2>&1; do
+until mysql --host="$host" --user="$DATABASE_USER" --port="$port" --password="$DATABASE_PASSWORD" --database="$DATABASE_NAME" --ssl-mode=VERIFY_CA --ssl-ca=/app/ca-certificate.crt -e 'SELECT 1;' >/dev/null 2>&1; do
   echo "MySQL is unavailable - sleeping"
   sleep 2
 done
