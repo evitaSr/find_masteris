@@ -28,4 +28,4 @@ COPY ca-certificate.crt /app/ca-certificate.crt
 
 EXPOSE 8000
 
-CMD /app/wait-for-db.sh gunicorn findMasteris.wsgi:application --bind 0.0.0.0:8000 --workers 1
+CMD ["sh", "/app/wait-for-db.sh", "gunicorn", "findMasteris.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "1"]
