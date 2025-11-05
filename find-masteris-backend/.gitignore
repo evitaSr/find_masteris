@@ -8,4 +8,3 @@ __pycache__/
 /media/
 *.env
 /staticfiles/
-*.crt
