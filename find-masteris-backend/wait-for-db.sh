@@ -19,7 +19,7 @@ while ! mysql --host="$host" \
     --port="$port" \
     --password="$DATABASE_PASSWORD" \
     --database="$DATABASE_NAME" \
-    "$SSL" \
+    "${SSL[@]}" \
     -e 'SELECT 1;' 2>mysql_error.log; do
 
   echo "MySQL connection failed (attempt $retry/$max_retries)"
