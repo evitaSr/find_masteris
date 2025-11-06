@@ -11,7 +11,7 @@ schema_view = get_schema_view(
         default_version='v1',
         description='',
     ),
-    public=False,
+    public=True,
 )
 urlpatterns = [
     path('', include('api.urls')),
