@@ -22,7 +22,7 @@ while ! mysql --host="$host" \
     --port="$port" \
     --password="$DATABASE_PASSWORD" \
     --database="$DATABASE_NAME" \
-    --ssl-mode=VERIFY_CA \
+    --ssl=VERIFY_CA \
     --ssl-ca=/app/ca-certificate.crt \
     -e 'SELECT 1;' 2>mysql_error.log; do
 
