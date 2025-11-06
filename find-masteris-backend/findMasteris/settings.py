@@ -18,13 +18,8 @@ from django.core.management.utils import get_random_secret_key
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = env("SECRET_KEY")
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = env.bool("DEBUG")
 DEBUG = bool(os.environ.get("DEBUG", default=0))
-# ALLOWED_HOSTS = env("ALLOWED_HOSTS").split(',')
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(",")
 
 INSTALLED_APPS = [
@@ -74,13 +69,13 @@ WSGI_APPLICATION = "findMasteris.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": 'django.db.backends.{}'.format(
-            os.getenv('DATABASE_ENGINE', 'sqlite3')
+            os.getenv('DATABASE_ENGINE', 'mysql')
         ),
         'NAME': os.getenv('DATABASE_NAME'),
         'USER': os.getenv('DATABASE_USER'),
         'PASSWORD': os.getenv('DATABASE_PASSWORD'),
         'HOST': os.getenv('DATABASE_HOST'),
-        'PORT': os.getenv('DATABASE_PORT', 5432),
+        'PORT': os.getenv('DATABASE_PORT', 3306),
         'OPTIONS': {
             'ssl': {'ca': os.getenv('DATABASE_CERT')}
         },

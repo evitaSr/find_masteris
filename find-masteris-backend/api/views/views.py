@@ -9,14 +9,21 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.models import Category, Service, FindMasterisUser, Handyman, Review, RequestToAddCategory, RequestToAddService
+from api.permissions import IsAdminUser
 from api.serializers import CategorySerializer, ServiceSerializer, UserSerializer, HandymanSerializer, \
     JobEntrySerializer, ReviewSerializer, RequestToAddCategorySerializer, RequestToAddServiceSerializer, \
     CustomTokenObtainPairSerializer
 from api.views.helpers import get_objs_or_response, get_job_entry_or_response, get_review, get_service_or_response
 
 
-class CategoryView(APIView):
-    permission_classes = [IsAuthenticated]
+class EditableByAdminOnlyView(APIView):
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [IsAuthenticated()]
+        return [IsAuthenticated(), IsAdminUser()]
+
+
+class CategoryView(EditableByAdminOnlyView):
     def get(self, request):
         items = Category.objects.all()
         serializer = CategorySerializer(items, many=True)
@@ -31,7 +38,7 @@ class CategoryView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CategoryDetailView(APIView):
+class CategoryDetailView(EditableByAdminOnlyView):
     def get(self, request, pk):
         try:
             category = Category.objects.get(pk=pk)
@@ -60,7 +67,7 @@ class CategoryDetailView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ServiceView(APIView):
+class ServiceView(EditableByAdminOnlyView):
     @swagger_auto_schema(tags=['service'])
     def get(self, request, category_pk):
         if not Category.objects.filter(pk=category_pk).exists():
@@ -82,7 +89,7 @@ class ServiceView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ServiceDetailView(APIView):
+class ServiceDetailView(EditableByAdminOnlyView):
     @swagger_auto_schema(tags=['service'])
     def get(self, request, pk, category_pk):
         service = get_service_or_response(pk, category_pk)
@@ -116,6 +123,8 @@ class ServiceDetailView(APIView):
 
 
 class UserView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         items = FindMasterisUser.objects.all()
         serializer = UserSerializer(items, many=True)
@@ -131,6 +140,8 @@ class UserView(APIView):
 
 
 class UserDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, pk):
         try:
             user = FindMasterisUser.objects.get(pk=pk)
@@ -163,6 +174,7 @@ class UserDetailView(APIView):
 
 
 class HandymanView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request):
         items = Handyman.objects.all()
         serializer = HandymanSerializer(items, many=True)
@@ -178,6 +190,7 @@ class HandymanView(APIView):
 
 
 class HandymanDetailView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, pk):
         try:
             handyman = Handyman.objects.get(pk=pk)
@@ -208,6 +221,7 @@ class HandymanDetailView(APIView):
 
 
 class HandymanDetailCategoryView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, handyman_pk):
         try:
             handyman = Handyman.objects.get(pk=handyman_pk)
@@ -219,6 +233,7 @@ class HandymanDetailCategoryView(APIView):
 
 
 class HandymanDetailCategoryServicesView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, handyman_pk, category_pk):
         try:
             handyman = Handyman.objects.get(pk=handyman_pk)
@@ -234,6 +249,7 @@ class HandymanDetailCategoryServicesView(APIView):
 
 
 class HandymanJobEntriesView(APIView):
+    permission_classes = [IsAuthenticated]
     @swagger_auto_schema(tags=['job_entry'])
     def get(self, request, handyman_pk, category_pk, service_pk):
         objs_or_response = get_objs_or_response(handyman_pk, category_pk, service_pk)
@@ -262,6 +278,7 @@ class HandymanJobEntriesView(APIView):
 
 
 class HandymanDetailJobEntriesView(APIView):
+    permission_classes = [IsAuthenticated]
     @swagger_auto_schema(tags=['job_entry'])
     def get(self, request, handyman_pk, category_pk, service_pk, pk):
         job_entry = get_job_entry_or_response(handyman_pk, category_pk, service_pk, pk)
@@ -293,6 +310,7 @@ class HandymanDetailJobEntriesView(APIView):
 
 
 class HandymanReviewView(APIView):
+    permission_classes = [IsAuthenticated]
     @swagger_auto_schema(tags=['review'])
     def get(self, request, handyman_pk, category_pk, service_pk):
         objs_or_response = get_objs_or_response(handyman_pk, category_pk, service_pk)
@@ -319,6 +337,7 @@ class HandymanReviewView(APIView):
 
 
 class HandymanReviewDetailView(APIView):
+    permission_classes = [IsAuthenticated]
     @swagger_auto_schema(tags=['review'])
     def get(self, request, handyman_pk, category_pk, service_pk, pk):
         review = get_review(handyman_pk, category_pk, service_pk, pk)
@@ -349,7 +368,7 @@ class HandymanReviewDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class RequestToAddCategoryView(APIView):
+class RequestToAddCategoryView(EditableByAdminOnlyView):
     def get(self, request):
         objs = RequestToAddCategory.objects.filter(is_rejected=False)
         serializer = RequestToAddCategorySerializer(objs, many=True)
@@ -367,7 +386,7 @@ class RequestToAddCategoryView(APIView):
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
-class RequestToAddCategoryDetailView(APIView):
+class RequestToAddCategoryDetailView(EditableByAdminOnlyView):
     def get(self, request, pk):
         try:
             obj = RequestToAddCategory.objects.get(pk=pk)
@@ -404,7 +423,7 @@ class RequestToAddCategoryDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class RequestToAddServiceView(APIView):
+class RequestToAddServiceView(EditableByAdminOnlyView):
     def get(self, request):
         objs = RequestToAddService.objects.filter(is_rejected=False)
         serializer = RequestToAddServiceSerializer(objs, many=True)
@@ -422,7 +441,7 @@ class RequestToAddServiceView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RequestToAddServiceDetailView(APIView):
+class RequestToAddServiceDetailView(EditableByAdminOnlyView):
     def get(self, request, pk):
         try:
             obj = RequestToAddService.objects.get(pk=pk)
@@ -470,6 +489,6 @@ class LogoutView(APIView):
             refresh_token = request.data['refresh']
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response({'detail': 'Logged out successfully'})
+            return Response({'detail': 'Logged out successfully'}, status=status.HTTP_200_OK)
         except Exception:
-            return Response({'error': 'Invalid token'}, status=400)
+            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
