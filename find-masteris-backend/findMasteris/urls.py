@@ -12,7 +12,7 @@ schema_view = get_schema_view(
         description='',
     ),
     public=True,
-    url='https://find-masteris-42bmh.ondigitalocean.app',
+    url='https://find-masteris-42bmh.ondigitalocean.app' if settings.DEBUG else '',
 )
 urlpatterns = [
     path('', include('api.urls')),

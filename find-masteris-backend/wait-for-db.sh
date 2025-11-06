@@ -9,8 +9,6 @@ echo "Waiting for MySQL at $host:$port..."
 echo "DATABASE_USER=$DATABASE_USER"
 echo "DATABASE_PASSWORD=$DATABASE_PASSWORD"
 echo "DATABASE_NAME=$DATABASE_NAME"
-echo "Files in app:"
-ls -l /app
 
 retry=0
 max_retries=30
@@ -21,8 +19,7 @@ while ! mysql --host="$host" \
     --port="$port" \
     --password="$DATABASE_PASSWORD" \
     --database="$DATABASE_NAME" \
-    --ssl \
-    --ssl-ca=/app/ca-certificate.crt \
+    "$SSL" \
     -e 'SELECT 1;' 2>mysql_error.log; do
 
   echo "MySQL connection failed (attempt $retry/$max_retries)"
@@ -32,7 +29,7 @@ while ! mysql --host="$host" \
 
   retry=$((retry+1))
   if [ $retry -ge $max_retries ]; then
-    echo "❗ ERROR: Could not connect to MySQL after $max_retries attempts."
+    echo "ERROR: Could not connect to MySQL after $max_retries attempts."
     exit 1
   fi
 

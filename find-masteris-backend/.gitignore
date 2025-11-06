@@ -8,3 +8,5 @@ __pycache__/
 /media/
 *.env
 /staticfiles/
+/mysql_error.log
+/findMasteris/settings1.py
