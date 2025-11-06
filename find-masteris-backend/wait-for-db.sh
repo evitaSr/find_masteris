@@ -3,7 +3,6 @@ set -e
 
 host="${DATABASE_HOST}"
 port="${DATABASE_PORT}"
-shift
 cmd="$@"
 
 echo "Waiting for MySQL at $host:$port..."
