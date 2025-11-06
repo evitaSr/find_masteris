@@ -12,6 +12,7 @@ schema_view = get_schema_view(
         description='',
     ),
     public=True,
+    url='https://find-masteris-42bmh.ondigitalocean.app',
 )
 urlpatterns = [
     path('', include('api.urls')),
