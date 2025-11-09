@@ -123,7 +123,10 @@ class ServiceDetailView(EditableByAdminOnlyView):
 
 
 class UserView(APIView):
-    permission_classes = [IsAuthenticated]
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [IsAuthenticated()]
+        return []
 
     def get(self, request):
         items = FindMasterisUser.objects.all()
@@ -174,7 +177,11 @@ class UserDetailView(APIView):
 
 
 class HandymanView(APIView):
-    permission_classes = [IsAuthenticated]
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [IsAuthenticated()]
+        return []
+
     def get(self, request):
         items = Handyman.objects.all()
         serializer = HandymanSerializer(items, many=True)
