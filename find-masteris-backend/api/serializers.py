@@ -4,7 +4,8 @@ from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from api.models import Category, Service, FindMasterisUser, Handyman, JobEntry, Review, JobEntryFile, RequestToAddCategory, \
+from api.models import Category, Service, FindMasterisUser, Handyman, JobEntry, Review, JobEntryFile, \
+    RequestToAddCategory, \
     RequestToAddService
 
 
@@ -25,12 +26,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         return Service.objects.create(category=category, **validated_data)
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FindMasterisUser
-        fields = ['pk', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', 'role']
-        extra_kwargs = {'password': {'write_only': True}}
-
+class PasswordHashingSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
         return super().create(validated_data)
@@ -40,7 +36,14 @@ class UserSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class HandymanSerializer(serializers.ModelSerializer):
+class UserSerializer(PasswordHashingSerializer):
+    class Meta:
+        model = FindMasterisUser
+        fields = ['pk', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', 'role']
+        extra_kwargs = {'password': {'write_only': True}}
+
+
+class HandymanSerializer(PasswordHashingSerializer):
     class Meta:
         model = Handyman
         fields = ['pk', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', 'first_name',
@@ -62,14 +65,14 @@ class JobEntrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JobEntry
-        fields = ['pk', 'title', 'description', 'service', 'handyman', 'uploaded_files', 'files',]
+        fields = ['pk', 'title', 'description', 'service', 'handyman', 'uploaded_files', 'files', ]
         read_only_fields = ['service', 'handyman']
 
     def create(self, validated_data):
         files = self.context.get('uploaded_files', [])
         handyman = self.context['handyman']
         service = self.context['service']
-        job_entry =  JobEntry.objects.create(handyman=handyman, service=service, **validated_data)
+        job_entry = JobEntry.objects.create(handyman=handyman, service=service, **validated_data)
 
         for file in files:
             JobEntryFile.objects.create(job_entry=job_entry, file=file)
@@ -115,13 +118,13 @@ class ReviewSerializer(serializers.ModelSerializer):
 class RequestToAddCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = RequestToAddCategory
-        fields = ['pk', 'requested_by', 'title', 'is_rejected',]
+        fields = ['pk', 'requested_by', 'title', 'is_rejected', ]
 
 
 class RequestToAddServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = RequestToAddService
-        fields = ['pk', 'requested_by', 'title', 'category', 'is_rejected',]
+        fields = ['pk', 'requested_by', 'title', 'category', 'is_rejected', ]
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
