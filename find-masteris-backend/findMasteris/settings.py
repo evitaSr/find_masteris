@@ -149,3 +149,13 @@ AUTH_USER_MODEL = 'api.FindMasterisUser'
 CORS_ALLOWED_ORIGINS = [
     os.environ.get('CORS_ALLOWED_ORIGINS'),
 ]
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
