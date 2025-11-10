@@ -56,13 +56,14 @@ class CategoryDetailView(EditableByAdminOnlyView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(request_body=CategorySerializer)
-    def patch(self, request, pk):
+    def put(self, request, pk):
         try:
             category = Category.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'Category with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
-        serializer = CategorySerializer(category, data=request.data, partial=True)
+        serializer = CategorySerializer(category, data=request.data)
         if serializer.is_valid():
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -106,16 +107,15 @@ class ServiceDetailView(EditableByAdminOnlyView):
         service.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    # FIXME: update
     @swagger_auto_schema(
         tags=['service'],
         request_body=ServiceSerializer
     )
-    def patch(self, request, pk, category_pk):
+    def put(self, request, pk, category_pk):
         service = get_service_or_response(pk, category_pk)
         if isinstance(service, Response):
             return service
-        serializer = ServiceSerializer(service, data=request.data, partial=True)
+        serializer = ServiceSerializer(service, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
