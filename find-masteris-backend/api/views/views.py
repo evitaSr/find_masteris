@@ -159,6 +159,8 @@ class UserDetailView(APIView):
             user = FindMasterisUser.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'User with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
+        if request.auth.get('role', '') != 'admin' and user != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
@@ -171,6 +173,8 @@ class UserDetailView(APIView):
             user = FindMasterisUser.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'User with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
+        if request.auth.get('role', '') != 'admin' and user != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -212,6 +216,9 @@ class HandymanDetailView(APIView):
             handyman = Handyman.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'Handyman with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
+        if request.auth.get('role', '') != 'admin' and handyman != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         serializer = HandymanSerializer(handyman, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -223,6 +230,9 @@ class HandymanDetailView(APIView):
             handyman = Handyman.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'Handyman with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
+        if request.auth.get('role', '') != 'admin' and handyman != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         handyman.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -299,6 +309,9 @@ class HandymanDetailJobEntriesView(APIView):
         job_entry = get_job_entry_or_response(handyman_pk, category_pk, service_pk, pk)
         if isinstance(job_entry, Response):
             return job_entry
+        if request.auth.get('role', '') != 'admin' and job_entry.handyman != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         serializer = JobEntrySerializer(job_entry, data=request.data, partial=True,
                                         context={'uploaded_files': request.FILES.getlist('uploaded_files')})
         if serializer.is_valid():
@@ -311,6 +324,8 @@ class HandymanDetailJobEntriesView(APIView):
         job_entry = get_job_entry_or_response(handyman_pk, category_pk, service_pk, pk)
         if isinstance(job_entry, Response):
             return job_entry
+        if request.auth.get('role', '') != 'admin' and job_entry.handyman != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         job_entry.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -360,6 +375,9 @@ class HandymanReviewDetailView(APIView):
         if isinstance(review, Response):
             return review
 
+        if request.auth.get('role', '') != 'admin' and review.client != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         serializer = ReviewSerializer(review, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -371,6 +389,9 @@ class HandymanReviewDetailView(APIView):
         review = get_review(handyman_pk, category_pk, service_pk, pk)
         if isinstance(review, Response):
             return review
+        if request.auth.get('role', '') == 'client' and review.client != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         review.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
