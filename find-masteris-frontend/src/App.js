@@ -1,7 +1,9 @@
-import './assets/style/App.css';
-
 function App() {
-	return <div className="App"></div>;
+	return (
+		<div className="App">
+			<h1>Home page</h1>
+		</div>
+	);
 }
 
 export default App;

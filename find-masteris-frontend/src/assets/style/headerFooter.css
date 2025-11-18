@@ -1,0 +1,24 @@
+footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: #3e5622;
+	color: white;
+	text-align: center;
+	padding: 2% 0;
+}
+
+header {
+	width: 100%;
+	background-color: #3e5622;
+	color: white;
+	text-align: center;
+	padding: 1% 0;
+}
+
+a {
+	text-decoration: none;
+	color: white;
+	padding: 0 2%;
+}
