@@ -1,11 +1,17 @@
 import { createContext, useState, useContext } from 'react';
 import axios from 'axios';
 import { User } from '../models/user';
+import { setAuthHeader, clearAuthHeader } from '../api/api';
+
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-	const [accessToken, setAccessToken] = useState(null);
-	const [refreshToken, setRefreshToken] = useState(null);
+	const [accessToken, setAccessToken] = useState(
+		localStorage.getItem('accessToken')
+	);
+	const [refreshToken, setRefreshToken] = useState(
+		localStorage.getItem('refreshToken')
+	);
 	const [user, setUser] = useState(null);
 
 	const apiUrl = process.env.REACT_APP_API_URL;
@@ -24,7 +30,10 @@ export function AuthProvider({ children }) {
 				new User(userData.user_id, userData.username, userData.role)
 			);
 			setAccessToken(response.data['access']);
+			setAuthHeader(response.data['access']);
+			localStorage.setItem('accessToken', response.data['access']);
 			setRefreshToken(response.data['refresh']);
+			localStorage.setItem('refreshToken', response.data['refresh']);
 		} catch (err) {
 			if (err.response && err.response.status === 401) {
 				throw new Error('Credentials are not correct');
@@ -50,24 +59,12 @@ export function AuthProvider({ children }) {
 			setAccessToken(null);
 			setRefreshToken(null);
 			setUser(null);
+			clearAuthHeader();
+			localStorage.clear();
 		} catch (err) {}
 	};
 
-	const profileDetails = async () => {
-		try {
-			const response = await axios.get(`${apiUrl}user/${user.id}/`, {
-				headers: {
-					Authorization: `Bearer ${accessToken}`,
-				},
-			});
-			console.log(response.data);
-			return response;
-		} catch (err) {
-			return null;
-		}
-	};
-
-	const value = { login, logout, accessToken, profileDetails };
+	const value = { login, logout, accessToken, user };
 
 	return (
 		<AuthContext.Provider value={value}>{children}</AuthContext.Provider>

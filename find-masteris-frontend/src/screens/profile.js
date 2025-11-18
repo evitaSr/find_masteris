@@ -2,29 +2,33 @@ import { useEffect, useState } from 'react';
 import CustomBody from '../components/customBody';
 import { useAuth } from '../context/authContext';
 import { UserDetails } from '../models/fullUser';
+import api from '../api/api';
 
 export default function Profile() {
-	const { profileDetails } = useAuth();
+	const { user } = useAuth();
 	const [profile, setProfile] = useState(null);
 
 	useEffect(() => {
+		if (!user) return;
 		async function fetchData() {
-			let response = await profileDetails();
+			console.log(user);
+			const response = await api.get(`user/${user.id}/`);
+			console.log(response);
 			if (response && response.data) {
-				response = response.data;
+				const data = response.data;
 				setProfile(
 					new UserDetails(
-						response.pk,
-						response.username,
-						response.role,
-						response.email,
-						response.date_joined
+						data.pk,
+						data.username,
+						data.role,
+						data.email,
+						data.date_joined
 					)
 				);
 			}
 		}
 		fetchData();
-	}, [profileDetails]);
+	}, [user]);
 
 	return (
 		<CustomBody>
