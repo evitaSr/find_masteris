@@ -32,10 +32,14 @@ class Service(models.Model):
 
 
 class FindMasterisUser(AbstractUser):
+    ROLE_ADMIN = 'admin'
+    ROLE_HANDYMAN = 'handyman'
+    ROLE_CLIENT = 'client'
+
     ROLE_CHOICES = (
-        ('admin', 'Admin'),
-        ('handyman', 'Handyman'),
-        ('client', 'Client'),
+        (ROLE_ADMIN, 'Admin'),
+        (ROLE_HANDYMAN, 'Handyman'),
+        (ROLE_CLIENT, 'Client'),
     )
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='client', null=True, blank=True, verbose_name='Role')
 

@@ -9,7 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.models import Category, Service, FindMasterisUser, Handyman, Review, RequestToAddCategory, RequestToAddService
-from api.permissions import IsAdminUser
+from api.permissions import IsAdminUser, IsHandymanOrUser
 from api.serializers import CategorySerializer, ServiceSerializer, UserSerializer, HandymanSerializer, \
     JobEntrySerializer, ReviewSerializer, RequestToAddCategorySerializer, RequestToAddServiceSerializer, \
     CustomTokenObtainPairSerializer
@@ -267,6 +267,10 @@ class HandymanDetailCategoryServicesView(APIView):
 
 class HandymanJobEntriesView(APIView):
     permission_classes = [IsAuthenticated]
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            [IsAuthenticated()]
+        return [IsAuthenticated(), IsHandymanOrAdmin()]
     @swagger_auto_schema(tags=['job_entry'])
     def get(self, request, handyman_pk, category_pk, service_pk):
         objs_or_response = get_objs_or_response(handyman_pk, category_pk, service_pk)
@@ -279,6 +283,7 @@ class HandymanJobEntriesView(APIView):
         return Response(serializer.data)
 
     @swagger_auto_schema(request_body=JobEntrySerializer, tags=['job_entry'])
+    # TODO: 403 jei postina useris o ne handyman
     def post(self, request, handyman_pk, category_pk, service_pk):
         objs_or_response = get_objs_or_response(handyman_pk, category_pk, service_pk)
         if isinstance(objs_or_response[0], Response):
