@@ -12,6 +12,7 @@ schema_view = get_schema_view(
         description='',
     ),
     public=True,
+    url='',
 )
 urlpatterns = [
     path('', include('api.urls')),
