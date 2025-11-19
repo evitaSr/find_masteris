@@ -39,17 +39,18 @@ class PasswordHashingSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(PasswordHashingSerializer):
+    date_joined = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
+
     class Meta:
         model = FindMasterisUser
         fields = ['pk', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', 'role']
         extra_kwargs = {'password': {'write_only': True}}
 
-    def get_date_joined(self, obj):
-        return obj.date_joined.strf_time('%Y-%m-%d')
-
 
 class HandymanSerializer(PasswordHashingSerializer):
     avg_rating = serializers.SerializerMethodField(read_only=True)
+    date_joined = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
+
     class Meta:
         model = Handyman
         fields = ['pk', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', 'first_name',
@@ -57,9 +58,6 @@ class HandymanSerializer(PasswordHashingSerializer):
         extra_kwargs = {
             'password': {'write_only': True},
         }
-
-    def get_date_joined(self, obj):
-        return obj.date_joined.strftime('%Y-%m-%d')
 
     def get_avg_rating(self, obj):
         avg = obj.received_reviews.all().aggregate(avg_rating=Avg('rating'))['avg_rating']
