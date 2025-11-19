@@ -3,7 +3,12 @@ import axios from 'axios';
 import { User } from '../models/user';
 import { setAuthHeader, clearAuthHeader } from '../api/api';
 
-const AuthContext = createContext(null);
+const AuthContext = createContext({
+	login: () => {},
+	logout: () => {},
+	accessToken: null,
+	user: null,
+});
 
 export function AuthProvider({ children }) {
 	const [accessToken, setAccessToken] = useState(
@@ -56,12 +61,13 @@ export function AuthProvider({ children }) {
 					},
 				}
 			);
-			setAccessToken(null);
-			setRefreshToken(null);
-			setUser(null);
-			clearAuthHeader();
-			localStorage.clear();
 		} catch (err) {}
+		localStorage.removeItem('accessToken');
+		localStorage.removeItem('refreshToken');
+		clearAuthHeader();
+		setUser(null);
+		setAccessToken(null);
+		setRefreshToken(null);
 	};
 
 	const value = { login, logout, accessToken, user };

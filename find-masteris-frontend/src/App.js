@@ -1,8 +1,10 @@
+import CustomBody from './components/customBody';
+
 function App() {
 	return (
-		<div className="App">
+		<CustomBody>
 			<h1>Home page</h1>
-		</div>
+		</CustomBody>
 	);
 }
 
