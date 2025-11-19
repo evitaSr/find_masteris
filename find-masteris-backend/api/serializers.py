@@ -1,4 +1,5 @@
 import os
+from decimal import Decimal
 
 from django.contrib.auth.hashers import make_password
 from django.db.models import Avg
@@ -48,7 +49,7 @@ class UserSerializer(PasswordHashingSerializer):
 
 
 class HandymanSerializer(PasswordHashingSerializer):
-    avg_rating = serializers.DecimalField(decimal_places=1, max_digits=4, read_only=True)
+    avg_rating = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Handyman
         fields = ['pk', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', 'first_name',
@@ -61,7 +62,8 @@ class HandymanSerializer(PasswordHashingSerializer):
         return obj.date_joined.strftime('%Y-%m-%d')
 
     def get_avg_rating(self, obj):
-        return round(obj.received_reviews.all().aggregate(avg_rating=Avg('rating'))['avg_rating'], 1)
+        avg = obj.received_reviews.all().aggregate(avg_rating=Avg('rating'))['avg_rating']
+        return round(avg if avg else Decimal(0), 1)
 
 class JobFileSerializer(serializers.ModelSerializer):
     class Meta:
