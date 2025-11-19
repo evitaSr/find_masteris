@@ -1,6 +1,7 @@
 import os
 
 from django.contrib.auth.hashers import make_password
+from django.db.models import Avg
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -42,16 +43,25 @@ class UserSerializer(PasswordHashingSerializer):
         fields = ['pk', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', 'role']
         extra_kwargs = {'password': {'write_only': True}}
 
+    def get_date_joined(self, obj):
+        return obj.date_joined.strf_time('%Y-%m-%d')
+
 
 class HandymanSerializer(PasswordHashingSerializer):
+    avg_rating = serializers.DecimalField(decimal_places=1, max_digits=4, read_only=True)
     class Meta:
         model = Handyman
         fields = ['pk', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', 'first_name',
-                  'last_name', 'contact_email', 'phone_no', 'website', ]
+                  'last_name', 'contact_email', 'phone_no', 'website', 'avg_rating']
         extra_kwargs = {
             'password': {'write_only': True},
         }
 
+    def get_date_joined(self, obj):
+        return obj.date_joined.strftime('%Y-%m-%d')
+
+    def get_avg_rating(self, obj):
+        return round(obj.received_reviews.all().aggregate(avg_rating=Avg('rating'))['avg_rating'], 1)
 
 class JobFileSerializer(serializers.ModelSerializer):
     class Meta:
