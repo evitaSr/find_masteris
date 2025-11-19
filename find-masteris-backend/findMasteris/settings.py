@@ -146,9 +146,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 AUTH_USER_MODEL = 'api.FindMasterisUser'
 
-CORS_ALLOWED_ORIGINS = [
-    os.environ.get('CORS_ALLOWED_ORIGINS'),
-]
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS').split(',')
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
