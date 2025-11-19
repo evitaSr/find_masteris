@@ -54,7 +54,7 @@ class HandymanSerializer(PasswordHashingSerializer):
     class Meta:
         model = Handyman
         fields = ['pk', 'username', 'password', 'email', 'is_staff', 'is_active', 'date_joined', 'first_name',
-                  'last_name', 'contact_email', 'phone_no', 'website', 'avg_rating']
+                  'last_name', 'contact_email', 'phone_no', 'website', 'avg_rating', 'role']
         extra_kwargs = {
             'password': {'write_only': True},
         }
