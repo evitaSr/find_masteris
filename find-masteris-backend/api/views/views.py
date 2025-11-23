@@ -12,7 +12,7 @@ from api.models import Category, Service, FindMasterisUser, Handyman, Review, Re
 from api.permissions import IsAdminUser, IsHandymanOrAdmin
 from api.serializers import CategorySerializer, ServiceSerializer, UserSerializer, HandymanSerializer, \
     JobEntrySerializer, ReviewSerializer, RequestToAddCategorySerializer, RequestToAddServiceSerializer, \
-    CustomTokenObtainPairSerializer
+    CustomTokenObtainPairSerializer, ChangePasswordSerializer
 from api.views.helpers import get_objs_or_response, get_job_entry_or_response, get_review, get_service_or_response
 
 
@@ -239,6 +239,25 @@ class HandymanDetailView(APIView):
 
         handyman.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserChangePasswordView(APIView):
+    # permission_classes = [IsAuthenticated]
+    @swagger_auto_schema(request_body=ChangePasswordSerializer, tags=['user'])
+    def put(self, request, pk):
+        try:
+            user = FindMasterisUser.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Response({'error': 'User with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
+        user_role = request.auth.get('role', '')
+        if user_role != 'admin' and user != request.user:
+            return Response({'error': f'User of role {user_role} can\'t edit object\'s password'},
+                            status=status.HTTP_403_FORBIDDEN)
+        serializer = ChangePasswordSerializer(data=request.data, context={'user': user, 'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class HandymanDetailCategoryView(APIView):

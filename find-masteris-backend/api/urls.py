@@ -5,7 +5,7 @@ from api.views.views import CategoryView, CategoryDetailView, ServiceView, Servi
     HandymanView, HandymanDetailView, HandymanDetailCategoryView, HandymanDetailCategoryServicesView, \
     HandymanJobEntriesView, HandymanDetailJobEntriesView, HandymanReviewView, HandymanReviewDetailView, \
     RequestToAddCategoryView, RequestToAddCategoryDetailView, RequestToAddServiceView, RequestToAddServiceDetailView, \
-    CustomTokenObtainPairView, LogoutView
+    CustomTokenObtainPairView, LogoutView, UserChangePasswordView
 
 urlpatterns = [
     path('category/', CategoryView.as_view(), name='category'),
@@ -16,6 +16,7 @@ urlpatterns = [
     path('user/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
     path('handyman/', HandymanView.as_view(), name='handyman'),
     path('handyman/<int:pk>/', HandymanDetailView.as_view(), name='handyman-detail'),
+    path('user/<int:pk>/password/', UserChangePasswordView.as_view()),
     path('handyman/<int:handyman_pk>/category/', HandymanDetailCategoryView.as_view(), name='handyman-category'),
     path('handyman/<int:handyman_pk>/category/<int:category_pk>/service/', HandymanDetailCategoryServicesView.as_view(),
          name='handyman-category-service'),

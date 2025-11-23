@@ -1,7 +1,7 @@
 import os
 from decimal import Decimal
 
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import make_password, check_password
 from django.db.models import Avg
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -37,6 +37,32 @@ class PasswordHashingSerializer(serializers.ModelSerializer):
         if 'password' in validated_data:
             validated_data['password'] = make_password(validated_data['password'])
         return super().update(instance, validated_data)
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=False)
+    new_password = serializers.CharField(required=True)
+
+    def validate(self, data):
+        user = self.context['user']
+        request = self.context['request']
+
+        if request.auth.get('role') != 'admin':
+            if 'old_password' not in data:
+                raise serializers.ValidationError({"old_password": "Old password is required."})
+
+            if not check_password(data['old_password'], user.password):
+                raise serializers.ValidationError({"old_password": "Old password is incorrect."})
+
+        return data
+
+    def save(self, **kwargs):
+        user = self.context['user']
+        new_password = self.validated_data['new_password']
+
+        user.password = make_password(new_password)
+        user.save()
+        return user
 
 
 class UserSerializer(PasswordHashingSerializer):
