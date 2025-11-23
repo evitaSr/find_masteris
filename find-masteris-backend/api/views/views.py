@@ -216,8 +216,9 @@ class HandymanDetailView(APIView):
             handyman = Handyman.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'Handyman with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
-        if request.auth.get('role', '') != 'admin' and handyman != request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+        if user_role := request.auth.get('role', '') != 'admin' and handyman != request.user:
+            return Response({'error': f'User of role {user_role} can\'t edit handyman object'},
+                            status=status.HTTP_403_FORBIDDEN)
 
         serializer = HandymanSerializer(handyman, data=request.data, partial=True)
         if serializer.is_valid():
@@ -230,8 +231,9 @@ class HandymanDetailView(APIView):
             handyman = Handyman.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return Response({'error': 'Handyman with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
-        if request.auth.get('role', '') != 'admin' and handyman != request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+        if user_role := request.auth.get('role', '') != 'admin' and handyman != request.user:
+            return Response({'error': f'User of role {user_role} can\'t edit handyman object'},
+                            status=status.HTTP_403_FORBIDDEN)
 
         handyman.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
