@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
-import { Formik, Field, ErrorMessage } from 'formik';
+import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
 
 // api:
@@ -12,13 +12,13 @@ import api from '../../api/api';
 // assets:
 import { ADMIN, HANDYMAN } from '../../assets/constants/roles';
 import { FaTrash } from 'react-icons/fa6';
+import { PiPasswordFill } from 'react-icons/pi';
 
 // components:
 import CustomBody from '../../components/customBody';
 import { Button, Modal } from 'react-bootstrap';
 // etc:
 import { UserDetails } from '../../models/fullUser';
-import axios from 'axios';
 
 export default function ProfileSettings() {
 	const { id } = useParams();
@@ -28,6 +28,9 @@ export default function ProfileSettings() {
 	const [profile, setProfile] = useState(null);
 	const [error, setError] = useState(null);
 	const [modalOpen, setModalOpen] = useState(false);
+	const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
+	const [passwordChangeSuccessful, setPasswordChangeSuccessful] =
+		useState(true);
 
 	useEffect(() => {
 		const getUserInfo = async (id) => {
@@ -103,6 +106,10 @@ export default function ProfileSettings() {
 		};
 		setModalOpen(false);
 		removeProfile();
+	};
+
+	const handleShowPasswordChangeForm = () => {
+		setShowChangePasswordForm(!showChangePasswordForm);
 	};
 
 	return (
@@ -325,14 +332,14 @@ export default function ProfileSettings() {
 									</div>
 								)}
 								{error && <p>{error}</p>}
-								<button type="submit">Save</button>
+								<Button type="submit">Save</Button>
 							</form>
 						)}
 					</Formik>
-					<button onClick={handleOpen}>
+					<Button onClick={handleOpen}>
 						<FaTrash />
 						Delete
-					</button>
+					</Button>
 					<Modal
 						show={modalOpen}
 						onHide={handleClose}
@@ -353,6 +360,102 @@ export default function ProfileSettings() {
 							<Button onClick={handleConfirm}>Confirm</Button>
 						</Modal.Footer>
 					</Modal>
+					<Button onClick={handleShowPasswordChangeForm}>
+						<PiPasswordFill />
+						Change password
+					</Button>
+					{showChangePasswordForm && (
+						<Formik
+							initialValues={{
+								oldPassword: '',
+								newPassword: '',
+								newPasswordRepeated: '',
+							}}
+							validationSchema={Yup.object({
+								oldPassword:
+									user.role === ADMIN
+										? Yup.string()
+										: Yup.string().required('Required'),
+								newPassword: Yup.string()
+									.notOneOf(
+										[Yup.ref('oldPassword')],
+										"Password can't match old one"
+									)
+									.required('Required'),
+								newPasswordRepeated: Yup.string()
+									.oneOf(
+										[Yup.ref('newPassword')],
+										'Passwords must match'
+									)
+									.required('Required'),
+							})}
+							onSubmit={(values) => {
+								const changeUserPassword = async () => {
+									let data = {
+										new_password: values.newPassword,
+									};
+									if (user.role !== ADMIN) {
+										data.old_password = values.oldPassword;
+									}
+									try {
+										const response = await api.put(
+											`user/${id}/password/`,
+											data
+										);
+										if (
+											response &&
+											response.status === 204
+										) {
+											setShowChangePasswordForm(false);
+											setPasswordChangeSuccessful(true);
+										} else {
+											setPasswordChangeSuccessful(false);
+										}
+									} catch {
+										setPasswordChangeSuccessful(false);
+									}
+								};
+								changeUserPassword();
+							}}
+						>
+							<Form>
+								{user.role !== ADMIN && (
+									<div>
+										<label htmlFor="oldPassword">
+											Current password
+										</label>
+										<Field
+											name="oldPassword"
+											type="password"
+										/>
+										<br />
+										<ErrorMessage name="oldPassword" />
+									</div>
+								)}
+								<label htmlFor="newPassword">
+									New password
+								</label>
+								<Field name="newPassword" type="password" />
+								<br />
+								<ErrorMessage name="newPassword" />
+								<br />
+								<label htmlFor="newPasswordRepeated">
+									Repeat new password
+								</label>
+								<Field
+									name="newPasswordRepeated"
+									type="password"
+								/>
+								<br />
+								<ErrorMessage name="newPasswordRepeated" />
+								<br />
+								{!passwordChangeSuccessful && (
+									<p>Password change was unsuccessful</p>
+								)}
+								<Button type="submit">Save</Button>
+							</Form>
+						</Formik>
+					)}
 				</div>
 			) : (
 				<p>Loading...</p>
