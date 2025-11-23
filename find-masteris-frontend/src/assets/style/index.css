@@ -37,3 +37,7 @@ code {
 	--grey: #a2a2a2;
 	--lightGrey: #d2d2d2;
 }
+
+.btn_primary {
+	background-color: var(--darkGreen);
+}

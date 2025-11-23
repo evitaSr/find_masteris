@@ -101,6 +101,26 @@ export default function Profile() {
 										<p>{profile.phoneNo}</p>
 									</div>
 								)}
+								{profile.website && (
+									<div className="inlineDivCenter iconWithText">
+										<MdOutlineLocalPhone />
+										<a
+											href={
+												profile.website.startsWith(
+													'http://'
+												) ||
+												profile.website.startsWith(
+													'https://'
+												)
+													? profile.website
+													: 'https://' +
+													  profile.website
+											}
+										>
+											{profile.website}
+										</a>
+									</div>
+								)}
 							</div>
 						</div>
 					</div>

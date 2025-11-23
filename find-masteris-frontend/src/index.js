@@ -10,9 +10,10 @@ import Profile from './screens/profile/profile';
 import ProfileSettings from './screens/profile/profileSettings';
 import Unauthorized from './screens/auth/unauthorized';
 // css:
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import './assets/style/customBootstrap.scss';
 import './assets/style/index.css';
 import './assets/style/headerFooter.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
