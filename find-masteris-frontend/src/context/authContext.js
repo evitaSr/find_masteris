@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { User } from '../models/user';
 import { setAuthHeader, clearAuthHeader } from '../api/api';
@@ -18,8 +18,17 @@ export function AuthProvider({ children }) {
 		localStorage.getItem('refreshToken')
 	);
 	const [user, setUser] = useState(null);
+	const [authLoaded, setAuthLoaded] = useState(false);
 
 	const apiUrl = process.env.REACT_APP_API_URL;
+
+	const decodeAccessToken = (token) => {
+		try {
+			return JSON.parse(atob(token.split('.')[1]));
+		} catch {
+			return null;
+		}
+	};
 
 	const login = async (username, password) => {
 		try {
@@ -27,9 +36,7 @@ export function AuthProvider({ children }) {
 				username: username,
 				password: password,
 			});
-			const userData = JSON.parse(
-				atob(response.data['access'].split('.')[1])
-			);
+			const userData = decodeAccessToken(response.data.access);
 			console.log(userData);
 			setUser(
 				new User(userData.user_id, userData.username, userData.role)
@@ -39,6 +46,7 @@ export function AuthProvider({ children }) {
 			localStorage.setItem('accessToken', response.data['access']);
 			setRefreshToken(response.data['refresh']);
 			localStorage.setItem('refreshToken', response.data['refresh']);
+			setAuthLoaded(true);
 		} catch (err) {
 			if (err.response && err.response.status === 401) {
 				throw new Error('Credentials are not correct');
@@ -68,9 +76,57 @@ export function AuthProvider({ children }) {
 		setUser(null);
 		setAccessToken(null);
 		setRefreshToken(null);
+		setAuthLoaded(false);
 	};
 
-	const value = { login, logout, accessToken, user };
+	const setUsername = (newUsername) => {
+		user.username = newUsername;
+	};
+
+	useEffect(() => {
+		const refreshAccessToken = async () => {
+			try {
+				const res = await axios.post(`${apiUrl}token/refresh/`, {
+					refresh: refreshToken,
+				});
+
+				const newAccess = res.data.access;
+				const data = decodeAccessToken(newAccess);
+
+				setAccessToken(newAccess);
+				localStorage.setItem('accessToken', newAccess);
+				setAuthHeader(newAccess);
+
+				setUser(new User(data.user_id, data.username, data.role));
+				return true;
+			} catch (err) {
+				logout();
+				return false;
+			}
+		};
+
+		if (!accessToken) {
+			return;
+		}
+
+		const data = decodeAccessToken(accessToken);
+		if (!data) {
+			logout();
+			return;
+		}
+		const isExpired = data.exp * 1000 < Date.now();
+
+		if (isExpired) {
+			const success = refreshAccessToken();
+			setAuthLoaded(success);
+		} else {
+			setUser(new User(data.user_id, data.username, data.role));
+			setAuthHeader(accessToken);
+			setAuthLoaded(true);
+		}
+	}, [accessToken, refreshToken, apiUrl]);
+
+	const value = { login, logout, accessToken, user, authLoaded, setUsername };
 
 	return (
 		<AuthContext.Provider value={value}>{children}</AuthContext.Provider>

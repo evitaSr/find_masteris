@@ -12,7 +12,7 @@ export default function CustomHeader() {
 
 	const handleLogout = async () => {
 		try {
-			logout();
+			await logout();
 			navigate('/');
 		} catch (err) {}
 	};

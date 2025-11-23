@@ -4,6 +4,8 @@ export class UserDetails {
 	constructor(
 		id,
 		username,
+		firstName,
+		lastName,
 		role,
 		email,
 		dateJoined,
@@ -14,6 +16,8 @@ export class UserDetails {
 	) {
 		this.id = id;
 		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.role = role;
 		this.email = email;
 		this.dateJoined = dateJoined;
