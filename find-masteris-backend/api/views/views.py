@@ -217,7 +217,7 @@ class HandymanDetailView(APIView):
         except ObjectDoesNotExist:
             return Response({'error': 'Handyman with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
         user_role = request.auth.get('role', '')
-        if user_role != 'admin' and handyman != request.user:
+        if user_role != 'admin' and handyman.pk != request.user.pk:
             return Response({'error': f'User of role {user_role} can\'t edit handyman object'},
                             status=status.HTTP_403_FORBIDDEN)
 
@@ -233,7 +233,7 @@ class HandymanDetailView(APIView):
         except ObjectDoesNotExist:
             return Response({'error': 'Handyman with id=%s not found' % pk}, status=status.HTTP_404_NOT_FOUND)
         user_role = request.auth.get('role', '')
-        if user_role != 'admin' and handyman != request.user:
+        if user_role != 'admin' and handyman.pk != request.user.pk:
             return Response({'error': f'User of role {user_role} can\'t edit handyman object'},
                             status=status.HTTP_403_FORBIDDEN)
 
