@@ -12,6 +12,7 @@ import Unauthorized from './screens/auth/unauthorized';
 // css:
 import './assets/style/index.css';
 import './assets/style/headerFooter.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
