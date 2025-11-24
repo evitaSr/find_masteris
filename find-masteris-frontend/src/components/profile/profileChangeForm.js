@@ -79,153 +79,149 @@ export default function ProfileChangeForm({ id, profile }) {
 				}
 			}}
 		>
-			{(formik) => (
-				<Form style={{ marginBottom: '2rem' }}>
-					<h3>Base profile info</h3>
-					<div
-						style={{
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'space-between',
-							marginBottom: '2rem',
-						}}
-					>
-						<div style={{ width: '50%' }}>
-							<div
-								style={{
-									display: 'flex',
-									alignItems: 'center',
-								}}
+			<Form style={{ marginBottom: '2rem' }}>
+				<h3>Base profile info</h3>
+				<div
+					style={{
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'space-between',
+						marginBottom: '2rem',
+					}}
+				>
+					<div style={{ width: '50%' }}>
+						<div
+							style={{
+								display: 'flex',
+								alignItems: 'center',
+							}}
+						>
+							<label
+								style={{ paddingRight: '5%' }}
+								htmlFor="username"
 							>
-								<label
-									style={{ paddingRight: '5%' }}
-									htmlFor="username"
-								>
-									Username
-								</label>
-								<Field name="username" type="text" />
-							</div>
-							<ErrorMessage
-								className="text-danger"
-								component="div"
-								name="username"
-							/>
+								Username
+							</label>
+							<Field name="username" type="text" />
 						</div>
-						<div style={{ width: '50%' }}>
-							<div
-								style={{
-									display: 'flex',
-									alignItems: 'center',
-								}}
-							>
-								<label
-									htmlFor="email"
-									style={{ paddingRight: '5%' }}
-								>
-									Email Address
-								</label>
-								<Field name="email" type="email" />
-							</div>
-							<ErrorMessage
-								className="text-danger"
-								component="div"
-								name="email"
-							/>
-						</div>
+						<ErrorMessage
+							className="text-danger"
+							component="div"
+							name="username"
+						/>
 					</div>
-					<div
-						style={{
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'space-between',
-						}}
-					>
-						<div style={{ width: '50%' }}>
-							<div
-								style={{
-									display: 'flex',
-									alignItems: 'center',
-								}}
+					<div style={{ width: '50%' }}>
+						<div
+							style={{
+								display: 'flex',
+								alignItems: 'center',
+							}}
+						>
+							<label
+								htmlFor="email"
+								style={{ paddingRight: '5%' }}
 							>
-								<label
-									style={{ paddingRight: '5%' }}
-									htmlFor="first_name"
-								>
-									First name
-								</label>
-								<Field name="first_name" type="text" />
-							</div>
-							<ErrorMessage
-								className="text-danger"
-								name="first_name"
-								component="div"
-							/>
+								Email Address
+							</label>
+							<Field name="email" type="email" />
 						</div>
-						<div style={{ width: '50%' }}>
-							<div
-								style={{
-									display: 'flex',
-									alignItems: 'center',
-								}}
-							>
-								<label
-									htmlFor="last_name"
-									style={{ paddingRight: '5%' }}
-								>
-									Last name
-								</label>
-								<Field name="last_name" type="text" />
-							</div>
-							<ErrorMessage
-								className="text-danger"
-								component="div"
-								name="last_name"
-							/>
-						</div>
+						<ErrorMessage
+							className="text-danger"
+							component="div"
+							name="email"
+						/>
 					</div>
-					<br />
-					{profile.role === HANDYMAN && (
+				</div>
+				<div
+					style={{
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'space-between',
+					}}
+				>
+					<div style={{ width: '50%' }}>
+						<div
+							style={{
+								display: 'flex',
+								alignItems: 'center',
+							}}
+						>
+							<label
+								style={{ paddingRight: '5%' }}
+								htmlFor="first_name"
+							>
+								First name
+							</label>
+							<Field name="first_name" type="text" />
+						</div>
+						<ErrorMessage
+							className="text-danger"
+							name="first_name"
+							component="div"
+						/>
+					</div>
+					<div style={{ width: '50%' }}>
+						<div
+							style={{
+								display: 'flex',
+								alignItems: 'center',
+							}}
+						>
+							<label
+								htmlFor="last_name"
+								style={{ paddingRight: '5%' }}
+							>
+								Last name
+							</label>
+							<Field name="last_name" type="text" />
+						</div>
+						<ErrorMessage
+							className="text-danger"
+							component="div"
+							name="last_name"
+						/>
+					</div>
+				</div>
+				<br />
+				{profile.role === HANDYMAN && (
+					<div>
+						<h3>Handyman profile info</h3>
 						<div>
-							<h3>Handyman profile info</h3>
-							<div>
-								<label htmlFor="contact_email">
-									Contact email
-								</label>
-								<Field name="contact_email" type="email" />
-								<br />
-								<ErrorMessage
-									className="text-danger"
-									component="div"
-									name="contact_email"
-								/>
-								<br />
+							<label htmlFor="contact_email">Contact email</label>
+							<Field name="contact_email" type="email" />
+							<br />
+							<ErrorMessage
+								className="text-danger"
+								component="div"
+								name="contact_email"
+							/>
+							<br />
 
-								<label htmlFor="phone_no">Phone number</label>
-								<Field name="phone_no" type="text" />
-								<br />
-								<ErrorMessage
-									className="text-danger"
-									component="div"
-									name="phone_no"
-								/>
-								<br />
+							<label htmlFor="phone_no">Phone number</label>
+							<Field name="phone_no" type="text" />
+							<br />
+							<ErrorMessage
+								className="text-danger"
+								component="div"
+								name="phone_no"
+							/>
+							<br />
 
-								<label htmlFor="website">Website</label>
-								<Field name="website" type="text" />
-								<br />
-								<ErrorMessage
-									className="text-danger"
-									component="div"
-									name="website"
-								/>
-								<br />
-							</div>
+							<label htmlFor="website">Website</label>
+							<Field name="website" type="text" />
+							<br />
+							<ErrorMessage
+								className="text-danger"
+								component="div"
+								name="website"
+							/>
+							<br />
 						</div>
-					)}
-					{error && <p>{error}</p>}
-					<Button type="submit">Save</Button>
-				</Form>
-			)}
+					</div>
+				)}
+				{error && <p>{error}</p>}
+				<Button type="submit">Save</Button>
+			</Form>
 		</Formik>
 	);
 }

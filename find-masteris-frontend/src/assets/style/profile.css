@@ -26,8 +26,6 @@
 }
 
 #settingsBtn {
-	background-color: white;
-	border: 2px solid var(--darkGreen);
 	width: 12rem;
 	margin-top: 1rem;
 	border-radius: 5px;
@@ -37,11 +35,6 @@
 	justify-content: center;
 	gap: 0.5rem;
 	transition: all 0.2s ease;
-}
-
-#settingsBtn:hover {
-	background-color: var(--lightGrey);
-	cursor: pointer;
 }
 
 .iconWithText {

@@ -1,26 +1,8 @@
-import { useState } from 'react';
-import { useAuth } from '../../context/authContext';
-import { useNavigate } from 'react-router';
+// components:
 import CustomBody from '../../components/customBody';
-import Error from '../../components/error';
+import LoginForm from '../../components/auth/loginForm';
 
 export default function Login() {
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
-	const [error, setError] = useState('');
-	const { login } = useAuth();
-	const navigate = useNavigate();
-	const handleLogin = async (e) => {
-		e.preventDefault();
-		try {
-			await login(username, password);
-			setError('');
-			navigate('/');
-		} catch (err) {
-			setError(err.message);
-		}
-	};
-
 	return (
 		<CustomBody>
 			<p
@@ -30,25 +12,9 @@ export default function Login() {
 					fontSize: '22px',
 				}}
 			>
-				Login screen
+				Login
 			</p>
-			<form onSubmit={handleLogin}>
-				<input
-					placeholder="username"
-					required
-					onChange={(u) => setUsername(u.target.value)}
-				/>{' '}
-				<br />
-				<input
-					type="password"
-					placeholder="password"
-					required
-					onChange={(p) => setPassword(p.target.value)}
-				/>{' '}
-				<br />
-				{error && <Error text={error} />}
-				<button type="submit">Login</button>
-			</form>
+			<LoginForm />
 		</CustomBody>
 	);
 }
