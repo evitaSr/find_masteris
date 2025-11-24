@@ -50,7 +50,7 @@ export default function ProfileChangeForm({ id, profile }) {
 						? handymanContactEmailFieldValidation
 						: userContactEmailFieldValidation,
 			})}
-			onSubmit={async (values, { setSubmitting }) => {
+			onSubmit={async (values) => {
 				try {
 					if (!profile.id) {
 						return;
@@ -67,7 +67,6 @@ export default function ProfileChangeForm({ id, profile }) {
 							values
 						);
 					}
-					console.log(response);
 					if (response.status === 200) {
 						setUsername(response.data.username);
 						navigate(`/user/${id}/`);

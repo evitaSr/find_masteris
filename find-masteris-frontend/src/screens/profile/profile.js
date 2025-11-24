@@ -12,7 +12,11 @@ import { ADMIN, HANDYMAN } from '../../assets/constants/roles';
 import '../../assets/style/profile.css';
 import '../../assets/style/index.css';
 import pfp from '../..//assets/images/pfp.jpg';
-import { MdOutlineEmail, MdOutlineLocalPhone } from 'react-icons/md';
+import {
+	MdOutlineEmail,
+	MdOutlineLocalPhone,
+	MdOutlineRateReview,
+} from 'react-icons/md';
 import { IoMdSettings } from 'react-icons/io';
 
 // components:
@@ -68,6 +72,9 @@ export default function Profile() {
 					<div className="inlineDivStart">
 						<img src={pfp} alt="user profile" />
 						<div style={{ marginTop: '2rem', padding: '0 2rem' }}>
+							<p className="helper" style={{ marginBottom: 0 }}>
+								{profile.role}
+							</p>
 							<div className="inlineDivCenter userTitle">
 								<h1>
 									{profile.firstName && profile.lastName
@@ -129,12 +136,23 @@ export default function Profile() {
 						(profile.id.toString() === user.id.toString() ||
 							user.role === ADMIN) && (
 							<Button
-								id="settingsBtn"
-								className="iconWithText"
-								onClick={() => navigate(`change/`)}
+								className="settingsBtn"
+								onClick={() => navigate('change/')}
 							>
-								<IoMdSettings />
+								<IoMdSettings class="btnIcon" />
 								Settings
+							</Button>
+						)}
+					{profile &&
+						user &&
+						profile.id.toString() !== user.id.toString() &&
+						profile.role === HANDYMAN && (
+							<Button
+								className="settingsBtn"
+								onClick={() => navigate('review/')}
+							>
+								<MdOutlineRateReview class="btnIcon" />
+								Write review
 							</Button>
 						)}
 				</div>

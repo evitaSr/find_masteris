@@ -25,7 +25,7 @@
 	width: 60rem;
 }
 
-#settingsBtn {
+.settingsBtn {
 	width: 12rem;
 	margin-top: 1rem;
 	border-radius: 5px;
@@ -46,4 +46,26 @@
 .iconWithText p {
 	margin: 0;
 	font-size: 0.9rem;
+}
+
+.btnIcon {
+	margin-right: 0.5rem;
+	font-size: 1.2rem;
+}
+
+#reviewForm div.field {
+	margin-bottom: 1rem;
+}
+
+#reviewForm label {
+	margin-right: 1rem;
+}
+
+.radioList label {
+	display: block;
+	margin: 0.2rem 0;
+}
+
+.radioList input {
+	margin-right: 0.2rem;
 }
