@@ -76,12 +76,13 @@ class UserSerializer(PasswordHashingSerializer):
 
 class HandymanSerializer(PasswordHashingSerializer):
     avg_rating = serializers.SerializerMethodField(read_only=True)
+    total_count = serializers.SerializerMethodField(read_only=True)
     date_joined = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
 
     class Meta:
         model = Handyman
         fields = ['pk', 'first_name', 'last_name', 'username', 'password', 'email', 'is_active', 'date_joined', 'first_name',
-                  'last_name', 'contact_email', 'phone_no', 'website', 'avg_rating', 'role']
+                  'last_name', 'contact_email', 'phone_no', 'website', 'avg_rating', 'total_count', 'role']
         extra_kwargs = {
             'password': {'write_only': True},
         }
@@ -89,6 +90,9 @@ class HandymanSerializer(PasswordHashingSerializer):
     def get_avg_rating(self, obj):
         avg = obj.received_reviews.all().aggregate(avg_rating=Avg('rating'))['avg_rating']
         return round(avg if avg else Decimal(0), 1)
+
+    def get_total_count(self, obj):
+        return obj.received_reviews.all().count()
 
 class JobFileSerializer(serializers.ModelSerializer):
     class Meta:
