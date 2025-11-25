@@ -141,9 +141,11 @@ class JobEntrySerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    created_on = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
+    client_full_title = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Review
-        fields = ['pk', 'rating', 'description', 'created_on', 'handyman', 'service', 'client', ]
+        fields = ['pk', 'rating', 'description', 'created_on', 'handyman', 'service', 'client', 'client_full_title',]
         read_only_fields = ['handyman', 'service', ]
 
     def create(self, validated_data):
@@ -154,6 +156,10 @@ class ReviewSerializer(serializers.ModelSerializer):
             service=service,
             **validated_data,
         )
+
+    def get_client_full_title(self, obj):
+        client = obj.client
+        return '%s %s' % (client.first_name, client.last_name) if client.first_name and client.last_name else client.username
 
 
 class RequestToAddCategorySerializer(serializers.ModelSerializer):
