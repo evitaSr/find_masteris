@@ -145,7 +145,7 @@ class ReviewSerializer(serializers.ModelSerializer):
     client_full_title = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Review
-        fields = ['pk', 'rating', 'description', 'created_on', 'handyman', 'service', 'client', 'client_full_title',]
+        fields = ['pk', 'rating', 'description', 'created_on', 'handyman', 'service', 'service__category', 'client', 'client_full_title',]
         read_only_fields = ['handyman', 'service', ]
 
     def create(self, validated_data):
