@@ -13,13 +13,14 @@ import { IoStar, IoStarOutline } from 'react-icons/io5';
 // etc:
 import CategoryWatcher from './categoryWatcher';
 
-export default function ReviewForm({ id }) {
+export default function ReviewForm({ id, categoryId, serviceId, reviewId }) {
 	const { user } = useAuth();
 	const navigate = useNavigate();
 
 	const [categories, setCategories] = useState([]);
 	const [services, setServices] = useState([]);
 	const [error, setError] = useState(null);
+	const [review, setReview] = useState(null);
 
 	useEffect(() => {
 		const fetchCategories = async () => {
@@ -36,13 +37,35 @@ export default function ReviewForm({ id }) {
 		fetchCategories();
 	}, []);
 
+	useEffect(() => {
+		const fetchReview = async () => {
+			try {
+				const response = await api.get(
+					`handyman/${id}/category/${categoryId}/service/${serviceId}/review/${reviewId}/`
+				);
+				console.log(response);
+				if (response && response.data) {
+					setReview(response.data);
+				}
+				setError(null);
+			} catch {
+				setError('Error when fetching review');
+			}
+		};
+		if (categoryId && serviceId && reviewId) {
+			fetchReview();
+		}
+	}, [categoryId, serviceId, reviewId, id]);
+
 	return (
 		<Formik
+			enableReinitialize={true}
 			initialValues={{
-				rating: 5,
-				description: '',
-				category: '',
-				service: '',
+				rating: review && review.rating ? review.rating : 5,
+				description:
+					review && review.description ? review.description : '',
+				category: categoryId || '',
+				service: serviceId || '',
 			}}
 			validationSchema={Yup.object({
 				rating: Yup.number().required('Required').min(1).max(5),
@@ -69,24 +92,48 @@ export default function ReviewForm({ id }) {
 						setError('Error when saving review');
 					}
 				};
-				saveReview();
+
+				const editReview = async () => {
+					try {
+						const response = await api.patch(
+							`handyman/${id}/category/${categoryId}/service/${serviceId}/review/${reviewId}/`,
+							{
+								rating: values.rating,
+								description: values.description,
+							}
+						);
+						if (response.status === 200) {
+							navigate(`/user/${id}/review/`);
+						} else {
+							setError('Error when saving review');
+						}
+					} catch {
+						setError('Error when updating review');
+					}
+				};
+				if (id && categoryId && serviceId && reviewId) {
+					editReview();
+				} else {
+					saveReview();
+				}
 			}}
 		>
 			<Form id="reviewForm">
 				<div className="field">
 					<label>Category</label>
-					<div role="group" className="radioList">
+					<Field
+						as="select"
+						name="category"
+						className="form-control"
+						disabled={categoryId && serviceId && reviewId}
+					>
+						<option value="">--------------</option>
 						{categories.map((category) => (
-							<label key={category.pk}>
-								<Field
-									type="radio"
-									name="category"
-									value={category.pk.toString()}
-								/>
+							<option value={category.pk} key={category.pk}>
 								{category.title}
-							</label>
+							</option>
 						))}
-					</div>
+					</Field>
 					<ErrorMessage
 						className="text-danger"
 						component="div"
@@ -100,23 +147,19 @@ export default function ReviewForm({ id }) {
 				/>
 				<div className="field">
 					<label>Service</label>
-					<div role="group" className="radioList">
-						{services.length === 0 && <p>No services available</p>}
+					<Field
+						as="select"
+						name="service"
+						className="form-control"
+						disabled={categoryId && serviceId && reviewId}
+					>
+						<option value="">--------------</option>
 						{services.map((service) => (
-							<label
-								key={service.pk}
-								style={{ display: 'block', margin: '0.2rem 0' }}
-							>
-								<Field
-									type="radio"
-									name="service"
-									value={service.pk.toString()}
-								/>
+							<option value={service.pk} key={service.pk}>
 								{service.title}
-							</label>
+							</option>
 						))}
-					</div>
-
+					</Field>
 					<ErrorMessage
 						className="text-danger"
 						component="div"

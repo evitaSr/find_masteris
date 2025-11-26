@@ -24,7 +24,7 @@ api.interceptors.response.use(
 		const originalRequest = error.config;
 
 		if (
-			error.respone?.status === 401 &&
+			error.response?.status === 401 &&
 			error.response?.data?.code === 'token_not_valid' &&
 			!originalRequest._retry
 		) {

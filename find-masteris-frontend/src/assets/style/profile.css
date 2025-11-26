@@ -69,3 +69,21 @@
 .radioList input {
 	margin-right: 0.2rem;
 }
+
+.reviewBlock p {
+	margin-bottom: 0;
+}
+
+.reviewBlock .userInfo,
+.reviewBlock .reviewInfo {
+	width: 50%;
+}
+
+.reviewBlock .userInfo .userName {
+	font-size: 1.5rem;
+}
+
+.reviewActions .icon {
+	margin-right: 0.5rem;
+	cursor: pointer;
+}

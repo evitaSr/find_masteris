@@ -10,8 +10,9 @@ import Profile from './screens/profile/profile';
 import ProfileSettings from './screens/profile/profileSettings';
 import Unauthorized from './screens/auth/unauthorized';
 import WriteReviewScreen from './screens/profile/writeReview';
+import ReviewList from './screens/profile/reviewList';
+import EditReviewScreen from './screens/profile/editReview';
 // css:
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/style/customBootstrap.scss';
 import './assets/style/index.css';
 import './assets/style/headerFooter.css';
@@ -27,8 +28,13 @@ root.render(
 				<Route path="/user/:id/" element={<Profile />} />
 				<Route path="/user/:id/change/" element={<ProfileSettings />} />
 				<Route
-					path="/user/:id/review/"
+					path="/user/:id/review/add/"
 					element={<WriteReviewScreen />}
+				/>
+				<Route path="/user/:id/review/" element={<ReviewList />} />
+				<Route
+					path="/user/:id/category/:categoryId/service/:serviceId/review/:reviewId/"
+					element={<EditReviewScreen />}
 				/>
 				<Route path="unauthorized/" element={<Unauthorized />} />
 			</Routes>

@@ -12,7 +12,8 @@ export class UserDetails {
 		contactEmail,
 		phoneNo,
 		website,
-		avgRating
+		avgRating,
+		totalCount
 	) {
 		this.id = id;
 		this.username = username;
@@ -25,6 +26,7 @@ export class UserDetails {
 		this.phoneNo = phoneNo;
 		this.website = website;
 		this.avgRating = avgRating;
+		this.total = totalCount;
 	}
 
 	/**

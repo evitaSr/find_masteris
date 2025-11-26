@@ -56,7 +56,8 @@ export default function Profile() {
 							data.contact_email,
 							data.phone_no,
 							data.website,
-							data.avg_rating
+							data.avg_rating,
+							data.total_count
 						)
 					);
 				}
@@ -82,7 +83,10 @@ export default function Profile() {
 										: profile.username}
 								</h1>
 								{profile && profile.role === HANDYMAN && (
-									<p>{profile.avgRating}/5</p>
+									<a href="review/">
+										Rating: {profile.avgRating} (Total:{' '}
+										{profile.total})
+									</a>
 								)}
 							</div>
 							<p className="helper">
@@ -139,7 +143,7 @@ export default function Profile() {
 								className="settingsBtn"
 								onClick={() => navigate('change/')}
 							>
-								<IoMdSettings class="btnIcon" />
+								<IoMdSettings className="btnIcon" />
 								Settings
 							</Button>
 						)}
@@ -149,9 +153,9 @@ export default function Profile() {
 						profile.role === HANDYMAN && (
 							<Button
 								className="settingsBtn"
-								onClick={() => navigate('review/')}
+								onClick={() => navigate('review/add/')}
 							>
-								<MdOutlineRateReview class="btnIcon" />
+								<MdOutlineRateReview className="btnIcon" />
 								Write review
 							</Button>
 						)}
