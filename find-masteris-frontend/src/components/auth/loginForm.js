@@ -36,7 +36,11 @@ export default function LoginForm() {
 			<Form>
 				<div style={{ marginBottom: '2rem' }}>
 					<label style={{ marginRight: '1rem' }}>Username</label>
-					<Field name="username" type="text" />
+					<Field
+						name="username"
+						type="text"
+						className="form-control"
+					/>
 					<ErrorMessage
 						component="div"
 						name="username"
@@ -45,7 +49,11 @@ export default function LoginForm() {
 				</div>
 				<div style={{ marginBottom: '2rem' }}>
 					<label style={{ marginRight: '1rem' }}>Password</label>
-					<Field name="password" type="password" />
+					<Field
+						name="password"
+						type="password"
+						className="form-control"
+					/>
 					<ErrorMessage
 						component="div"
 						name="password"
@@ -53,7 +61,15 @@ export default function LoginForm() {
 					/>
 				</div>
 				{error && <Error text={error} />}
-				<Button type="submit">Login</Button>
+				<div className="alignedBtns">
+					<Button type="submit">Login</Button>
+					<div className="alignedBtnsGroup">
+						<p>Not a member?</p>
+						<Button onClick={() => navigate('/signup')}>
+							Sign up
+						</Button>
+					</div>
+				</div>
 			</Form>
 		</Formik>
 	);
