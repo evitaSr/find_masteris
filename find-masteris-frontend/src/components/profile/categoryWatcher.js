@@ -16,7 +16,6 @@ export default function CategoryWatcher({ setServices, error, setError }) {
 				const response = await api.get(
 					`category/${values.category}/service/`
 				);
-				console.log(response);
 				if (response && response.data) {
 					setServices(response.data);
 				}
@@ -37,7 +36,6 @@ export default function CategoryWatcher({ setServices, error, setError }) {
 		if (!values.category) {
 			return;
 		}
-		console.log(values.category);
 		fetchServices();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [values.category, accessToken, authLoaded]);

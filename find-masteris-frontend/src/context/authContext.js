@@ -37,7 +37,6 @@ export function AuthProvider({ children }) {
 				password: password,
 			});
 			const userData = decodeAccessToken(response.data.access);
-			console.log(userData);
 			setUser(
 				new User(userData.user_id, userData.username, userData.role)
 			);
@@ -124,6 +123,7 @@ export function AuthProvider({ children }) {
 			setAuthHeader(accessToken);
 			setAuthLoaded(true);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [accessToken, refreshToken, apiUrl]);
 
 	const value = { login, logout, accessToken, user, authLoaded, setUsername };
