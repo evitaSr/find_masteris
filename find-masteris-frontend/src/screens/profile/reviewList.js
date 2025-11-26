@@ -13,7 +13,7 @@ import { LuPencil } from 'react-icons/lu';
 
 // components:
 import CustomBody from '../../components/customBody';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import Rating from 'react-rating';
 
 // etc:
@@ -33,6 +33,8 @@ export default function ReviewList() {
 	const [avgRating, setAvgRating] = useState(0);
 	const [error, setError] = useState(null);
 	const [buttonIsDisabled, setButtonIsDisabled] = useState(true);
+	const [modalOpen, setModalOpen] = useState(false);
+	const [modalError, setModalError] = useState(null);
 
 	useEffect(() => {
 		if (!authLoaded) {
@@ -118,14 +120,45 @@ export default function ReviewList() {
 		}
 	};
 
-	const handleDelete = (review) => {
-		console.log(review);
+	const handleDeleteReview = (review) => {
+		const deleteReview = async () => {
+			try {
+				const response = await api.delete(
+					`handyman/${id}/category/${selectedCategory}/service/${selectedService}/review/${review.pk}/`
+				);
+				if (response.status === 204) {
+					setModalError(null);
+					handleCloseModal();
+					setReviews((r) =>
+						reviews.filter((item) => item.pk !== review.pk)
+					);
+				}
+			} catch {
+				setModalError('Error when deleting review');
+			}
+		};
+
+		deleteReview();
 	};
 
 	const handleEdit = (review) => {
+		if (!selectedCategory || !selectedService) {
+			return;
+		}
 		navigate(
 			`/user/${id}/category/${selectedCategory}/service/${selectedService}/review/${review.pk}/`
 		);
+	};
+
+	const handleOpenModal = () => {
+		if (!selectedCategory || !selectedService) {
+			return;
+		}
+		setModalOpen(true);
+	};
+	const handleCloseModal = () => {
+		setModalOpen(false);
+		setModalError(null);
 	};
 
 	return (
@@ -215,10 +248,53 @@ export default function ReviewList() {
 											/>
 											<FaRegTrashAlt
 												className="icon"
-												onClick={() =>
-													handleDelete(review)
-												}
+												onClick={handleOpenModal}
 											/>
+											<Modal
+												show={modalOpen}
+												onHide={handleCloseModal}
+												backdrop="static"
+												keyboard={false}
+												centered
+											>
+												<Modal.Header closeButton>
+													<Modal.Title>
+														Confirmation for review
+														deletion
+													</Modal.Title>
+												</Modal.Header>
+												<Modal.Body>
+													<p>
+														Are you sure you want to
+														remove this review?
+													</p>
+													{modalError && (
+														<p className="text-danger">
+															{modalError}
+														</p>
+													)}
+												</Modal.Body>
+												<Modal.Footer>
+													<Button
+														onClick={
+															handleCloseModal
+														}
+														variant="secondary"
+													>
+														Close
+													</Button>
+													<Button
+														onClick={() =>
+															handleDeleteReview(
+																review
+															)
+														}
+														variant="danger"
+													>
+														Confirm
+													</Button>
+												</Modal.Footer>
+											</Modal>
 										</div>
 									)}
 								</div>

@@ -43,7 +43,6 @@ export default function ReviewForm({ id, categoryId, serviceId, reviewId }) {
 				const response = await api.get(
 					`handyman/${id}/category/${categoryId}/service/${serviceId}/review/${reviewId}/`
 				);
-				console.log(response);
 				if (response && response.data) {
 					setReview(response.data);
 				}
@@ -193,7 +192,8 @@ export default function ReviewForm({ id, categoryId, serviceId, reviewId }) {
 						name="description"
 						as="textarea"
 						rows={2}
-						style={{ width: '40%' }}
+						style={{ width: '100%' }}
+						className="form-control"
 					/>
 				</div>
 
