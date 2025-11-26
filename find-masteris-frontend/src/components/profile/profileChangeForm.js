@@ -89,19 +89,18 @@ export default function ProfileChangeForm({ id, profile }) {
 					}}
 				>
 					<div style={{ width: '50%' }}>
-						<div
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-							}}
-						>
+						<div className="form-row">
 							<label
 								style={{ paddingRight: '5%' }}
 								htmlFor="username"
 							>
 								Username
 							</label>
-							<Field name="username" type="text" />
+							<Field
+								name="username"
+								type="text"
+								className="form-control"
+							/>
 						</div>
 						<ErrorMessage
 							className="text-danger"
@@ -110,19 +109,18 @@ export default function ProfileChangeForm({ id, profile }) {
 						/>
 					</div>
 					<div style={{ width: '50%' }}>
-						<div
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-							}}
-						>
+						<div className="form-row">
 							<label
 								htmlFor="email"
 								style={{ paddingRight: '5%' }}
 							>
 								Email Address
 							</label>
-							<Field name="email" type="email" />
+							<Field
+								name="email"
+								type="email"
+								className="form-control"
+							/>
 						</div>
 						<ErrorMessage
 							className="text-danger"
@@ -139,19 +137,18 @@ export default function ProfileChangeForm({ id, profile }) {
 					}}
 				>
 					<div style={{ width: '50%' }}>
-						<div
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-							}}
-						>
+						<div className="form-row">
 							<label
 								style={{ paddingRight: '5%' }}
 								htmlFor="first_name"
 							>
 								First name
 							</label>
-							<Field name="first_name" type="text" />
+							<Field
+								name="first_name"
+								type="text"
+								className="form-control"
+							/>
 						</div>
 						<ErrorMessage
 							className="text-danger"
@@ -160,19 +157,18 @@ export default function ProfileChangeForm({ id, profile }) {
 						/>
 					</div>
 					<div style={{ width: '50%' }}>
-						<div
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-							}}
-						>
+						<div className="form-row">
 							<label
 								htmlFor="last_name"
 								style={{ paddingRight: '5%' }}
 							>
 								Last name
 							</label>
-							<Field name="last_name" type="text" />
+							<Field
+								name="last_name"
+								type="text"
+								className="form-control"
+							/>
 						</div>
 						<ErrorMessage
 							className="text-danger"
@@ -187,38 +183,43 @@ export default function ProfileChangeForm({ id, profile }) {
 						<h3>Handyman profile info</h3>
 						<div>
 							<label htmlFor="contact_email">Contact email</label>
-							<Field name="contact_email" type="email" />
-							<br />
+							<Field
+								name="contact_email"
+								type="email"
+								className="form-control"
+							/>
 							<ErrorMessage
 								className="text-danger"
 								component="div"
 								name="contact_email"
 							/>
-							<br />
-
 							<label htmlFor="phone_no">Phone number</label>
-							<Field name="phone_no" type="text" />
-							<br />
+							<Field
+								name="phone_no"
+								type="text"
+								className="form-control"
+							/>
 							<ErrorMessage
 								className="text-danger"
 								component="div"
 								name="phone_no"
 							/>
-							<br />
-
 							<label htmlFor="website">Website</label>
-							<Field name="website" type="text" />
-							<br />
+							<Field
+								name="website"
+								type="text"
+								className="form-control"
+							/>
 							<ErrorMessage
 								className="text-danger"
 								component="div"
 								name="website"
 							/>
-							<br />
 						</div>
 					</div>
 				)}
 				{error && <p>{error}</p>}
+				<br />
 				<Button type="submit">Save</Button>
 			</Form>
 		</Formik>

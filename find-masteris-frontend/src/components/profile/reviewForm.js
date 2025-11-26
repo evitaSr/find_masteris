@@ -192,7 +192,6 @@ export default function ReviewForm({ id, categoryId, serviceId, reviewId }) {
 						name="description"
 						as="textarea"
 						rows={2}
-						style={{ width: '100%' }}
 						className="form-control"
 					/>
 				</div>

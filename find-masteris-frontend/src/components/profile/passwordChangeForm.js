@@ -67,8 +67,11 @@ export default function PasswordChangeForm({
 				{user.role !== ADMIN && (
 					<div>
 						<label htmlFor="oldPassword">Current password</label>
-						<Field name="oldPassword" type="password" />
-						<br />
+						<Field
+							name="oldPassword"
+							type="password"
+							className="form-control"
+						/>
 						<ErrorMessage
 							className="text-danger"
 							component="div"
@@ -77,28 +80,33 @@ export default function PasswordChangeForm({
 					</div>
 				)}
 				<label htmlFor="newPassword">New password</label>
-				<Field name="newPassword" type="password" />
-				<br />
+				<Field
+					name="newPassword"
+					type="password"
+					className="form-control"
+				/>
 				<ErrorMessage
 					className="text-danger"
 					component="div"
 					name="newPassword"
 				/>
-				<br />
 				<label htmlFor="newPasswordRepeated">Repeat new password</label>
-				<Field name="newPasswordRepeated" type="password" />
-				<br />
+				<Field
+					name="newPasswordRepeated"
+					type="password"
+					className="form-control"
+				/>
 				<ErrorMessage
 					className="text-danger"
 					component="div"
 					name="newPasswordRepeated"
 				/>
-				<br />
 				{!passwordChangeSuccessful && (
 					<p className="text-danger">
 						Password change was unsuccessful
 					</p>
 				)}
+				<br />
 				<Button variant="primary" type="submit">
 					Save
 				</Button>

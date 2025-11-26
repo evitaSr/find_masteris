@@ -87,3 +87,28 @@
 	margin-right: 0.5rem;
 	cursor: pointer;
 }
+
+.form-row {
+	display: grid;
+	grid-template-columns: 150px 1fr;
+	gap: 1rem;
+	margin-bottom: 1rem;
+	align-items: center;
+}
+
+.form-row input {
+	width: 90%;
+}
+
+button.btnWithIcon {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.alignedButtons {
+	margin-bottom: 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}

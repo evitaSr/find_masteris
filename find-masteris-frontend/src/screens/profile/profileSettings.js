@@ -11,6 +11,7 @@ import api from '../../api/api';
 import { ADMIN, HANDYMAN } from '../../assets/constants/roles';
 import { FaTrash } from 'react-icons/fa6';
 import { PiPasswordFill } from 'react-icons/pi';
+import '../../assets/style/profile.css';
 
 // components:
 import CustomBody from '../../components/customBody';
@@ -111,52 +112,48 @@ export default function ProfileSettings() {
 			{profile ? (
 				<div>
 					<ProfileChangeForm id={id} profile={profile} />
-					<div style={{ marginBottom: '2rem' }}>
+					<div className="alignedButtons">
+						<Button
+							onClick={handleShowPasswordChangeForm}
+							className="btnWithIcon"
+						>
+							<PiPasswordFill />
+							Change password
+						</Button>
 						<Button
 							onClick={handleOpen}
 							style={{ marginRight: '2rem' }}
+							className="btnWithIcon"
+							variant="danger"
 						>
 							<FaTrash />
 							Delete
 						</Button>
-						<Modal
-							show={modalOpen}
-							onHide={handleClose}
-							backdrop="static"
-							keyboard={false}
-							centered
-						>
-							<Modal.Header closeButton>
-								<Modal.Title>
-									Confirmation for profile deletion
-								</Modal.Title>
-							</Modal.Header>
-							<Modal.Body>
-								<p>
-									Are you sure you want to remove this
-									profile?
-								</p>
-							</Modal.Body>
-							<Modal.Footer>
-								<Button
-									onClick={handleClose}
-									variant="secondary"
-								>
-									Close
-								</Button>
-								<Button
-									onClick={handleConfirm}
-									variant="danger"
-								>
-									Confirm
-								</Button>
-							</Modal.Footer>
-						</Modal>
-						<Button onClick={handleShowPasswordChangeForm}>
-							<PiPasswordFill />
-							Change password
-						</Button>
 					</div>
+					<Modal
+						show={modalOpen}
+						onHide={handleClose}
+						backdrop="static"
+						keyboard={false}
+						centered
+					>
+						<Modal.Header closeButton>
+							<Modal.Title>
+								Confirmation for profile deletion
+							</Modal.Title>
+						</Modal.Header>
+						<Modal.Body>
+							<p>Are you sure you want to remove this profile?</p>
+						</Modal.Body>
+						<Modal.Footer>
+							<Button onClick={handleClose} variant="secondary">
+								Close
+							</Button>
+							<Button onClick={handleConfirm} variant="danger">
+								Confirm
+							</Button>
+						</Modal.Footer>
+					</Modal>
 					{showChangePasswordForm && (
 						<PasswordChangeForm
 							id={id}
