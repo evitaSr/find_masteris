@@ -15,6 +15,8 @@ import Unauthorized from './screens/auth/unauthorized';
 import WriteReviewScreen from './screens/profile/writeReview';
 import ReviewList from './screens/profile/reviewList';
 import EditReviewScreen from './screens/profile/editReview';
+// post screens:
+import { CreateJobEntry } from './screens/posts/createJobEntry';
 // css:
 import './assets/style/customBootstrap.scss';
 import './assets/style/index.css';
@@ -44,6 +46,10 @@ root.render(
 					<Route
 						path="/user/:id/category/:categoryId/service/:serviceId/review/:reviewId/"
 						element={<EditReviewScreen />}
+					/>
+					<Route
+						path="handyman/:id/job_entry/"
+						element={<CreateJobEntry />}
 					/>
 					<Route path="unauthorized/" element={<Unauthorized />} />
 				</Routes>

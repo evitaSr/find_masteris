@@ -1,0 +1,110 @@
+import { useEffect, useState } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+
+// api:
+import api from '../../api/api';
+
+// components:
+import { Button } from 'react-bootstrap';
+import CategoryWatcher from '../profile/categoryWatcher';
+
+export default function JobEntryForm() {
+	const [categories, setCategories] = useState([]);
+	const [services, setServices] = useState([]);
+	const [error, setError] = useState(null);
+
+	useEffect(() => {
+		const fetchCategories = async () => {
+			try {
+				const response = await api.get('category/');
+				if (response && response.data) {
+					setCategories(response.data);
+				}
+			} catch {
+				setError('Error when fetching categories');
+			}
+		};
+
+		fetchCategories();
+	});
+
+	return (
+		<Formik
+			initialValues={{
+				title: '',
+				description: '',
+				category: '',
+				service: '',
+			}}
+			validationSchema={Yup.object({
+				category: Yup.number().required('Required'),
+				service: Yup.number().required('Required'),
+				title: Yup.string().required('Required'),
+			})}
+		>
+			<Form>
+				<label>Category</label>
+				<Field className="form-control" as="select" name="category">
+					<option value="">--------------</option>
+					{categories.map((category) => (
+						<option value={category.pk} key={category.pk}>
+							{category.title}
+						</option>
+					))}
+				</Field>
+				<ErrorMessage
+					className="text-danger"
+					component="div"
+					name="category"
+				/>
+				<CategoryWatcher
+					setServices={setServices}
+					error={error}
+					setError={setError}
+				/>
+
+				<label>Service</label>
+				<Field className="form-control" as="select" name="service">
+					<option value="">--------------</option>
+					{services.map((service) => (
+						<option value={service.pk} key={service.pk}>
+							{service.title}
+						</option>
+					))}
+				</Field>
+				<ErrorMessage
+					className="text-danger"
+					component="div"
+					name="service"
+				/>
+				<label>Title</label>
+				<Field
+					className="form-control"
+					type="text"
+					name="title"
+				></Field>
+				<ErrorMessage
+					className="text-danger"
+					component="div"
+					name="title"
+				/>
+				<label>Description</label>
+				<Field
+					className="form-control"
+					as="textarea"
+					rows={4}
+					name="description"
+				></Field>
+				<ErrorMessage
+					className="text-danger"
+					component="div"
+					name="description"
+				/>
+				<br />
+				{error && <p className="text-danger">{error}</p>}
+				<Button type="Submit">Create</Button>
+			</Form>
+		</Formik>
+	);
+}
