@@ -41,3 +41,20 @@ code {
 .btn_primary {
 	background-color: var(--darkGreen);
 }
+
+html,
+body,
+#root {
+	height: 100%;
+	margin: 0;
+}
+
+#root {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.main-content {
+	flex: 1;
+}

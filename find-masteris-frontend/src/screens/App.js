@@ -1,4 +1,4 @@
-import CustomBody from './components/customBody';
+import CustomBody from '../components/customBody';
 
 function App() {
 	return (

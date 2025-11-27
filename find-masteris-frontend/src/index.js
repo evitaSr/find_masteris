@@ -4,7 +4,7 @@ import CustomFooter from './components/footer';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/authContext';
 
-import App from './App';
+import App from './screens/App';
 // auth screens:
 import Login from './screens/auth/login';
 import Signup from './screens/auth/signup';
@@ -25,24 +25,29 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<BrowserRouter>
 		<AuthProvider>
-			<CustomHeader />
-			<Routes>
-				<Route path="/" element={<App />} />
-				<Route path="/login" element={<Login />} />
-				<Route path="/signup" element={<Signup />} />
-				<Route path="/user/:id/" element={<Profile />} />
-				<Route path="/user/:id/change/" element={<ProfileSettings />} />
-				<Route
-					path="/user/:id/review/add/"
-					element={<WriteReviewScreen />}
-				/>
-				<Route path="/user/:id/review/" element={<ReviewList />} />
-				<Route
-					path="/user/:id/category/:categoryId/service/:serviceId/review/:reviewId/"
-					element={<EditReviewScreen />}
-				/>
-				<Route path="unauthorized/" element={<Unauthorized />} />
-			</Routes>
+			<div className="main-content">
+				<CustomHeader />
+				<Routes>
+					<Route path="/" element={<App />} />
+					<Route path="/login" element={<Login />} />
+					<Route path="/signup" element={<Signup />} />
+					<Route path="/user/:id/" element={<Profile />} />
+					<Route
+						path="/user/:id/change/"
+						element={<ProfileSettings />}
+					/>
+					<Route
+						path="/user/:id/review/add/"
+						element={<WriteReviewScreen />}
+					/>
+					<Route path="/user/:id/review/" element={<ReviewList />} />
+					<Route
+						path="/user/:id/category/:categoryId/service/:serviceId/review/:reviewId/"
+						element={<EditReviewScreen />}
+					/>
+					<Route path="unauthorized/" element={<Unauthorized />} />
+				</Routes>
+			</div>
 			<CustomFooter />
 		</AuthProvider>
 	</BrowserRouter>
