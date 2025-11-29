@@ -132,10 +132,11 @@ class JobFileSerializer(serializers.ModelSerializer):
 class JobEntrySerializer(serializers.ModelSerializer):
     uploaded_files = serializers.ListSerializer(child=serializers.FileField(), write_only=True, required=False)
     files = JobFileSerializer(many=True, read_only=True)
+    created_on = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
 
     class Meta:
         model = JobEntry
-        fields = ['pk', 'title', 'description', 'service', 'handyman', 'uploaded_files', 'files', ]
+        fields = ['pk', 'title', 'description', 'service', 'handyman', 'uploaded_files', 'files', 'created_on']
         read_only_fields = ['service', 'handyman']
 
     def validate(self, attrs):

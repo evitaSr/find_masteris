@@ -66,6 +66,7 @@ class JobEntry(models.Model):
     description = models.TextField(verbose_name=_('Description'))
     service = models.ForeignKey(Service, verbose_name=_('Service'), on_delete=models.PROTECT)
     handyman = models.ForeignKey(Handyman, verbose_name=_('Handyman'), on_delete=models.CASCADE)
+    created_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     class Meta:
         verbose_name = _('Job entry')
