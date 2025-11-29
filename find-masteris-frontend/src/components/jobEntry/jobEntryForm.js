@@ -44,7 +44,10 @@ export default function JobEntryForm({ handymanId }) {
 			validationSchema={Yup.object({
 				category: Yup.number().required('Required'),
 				service: Yup.number().required('Required'),
-				title: Yup.string().required('Required'),
+				title: Yup.string()
+					.required('Required')
+					.max(100, "Title can't exceed 100 characters"),
+				description: Yup.string().required('Required'),
 			})}
 			onSubmit={async (values) => {
 				const formData = new FormData();

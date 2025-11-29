@@ -16,7 +16,8 @@ import WriteReviewScreen from './screens/profile/writeReview';
 import ReviewList from './screens/profile/reviewList';
 import EditReviewScreen from './screens/profile/editReview';
 // post screens:
-import { CreateJobEntry } from './screens/posts/createJobEntry';
+import { CreateJobEntry } from './screens/jobEntry/createJobEntry';
+import JobEntryDetail from './screens/jobEntry/jobEntryDetails';
 // css:
 import './assets/style/customBootstrap.scss';
 import './assets/style/index.css';
@@ -50,6 +51,10 @@ root.render(
 					<Route
 						path="handyman/:id/job_entry/"
 						element={<CreateJobEntry />}
+					/>
+					<Route
+						path="handyman/:id/category/:category_id/service/:service_id/job_entry/:job_entry_id/"
+						element={<JobEntryDetail />}
 					/>
 					<Route path="unauthorized/" element={<Unauthorized />} />
 				</Routes>

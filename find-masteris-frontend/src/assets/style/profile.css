@@ -112,3 +112,49 @@ button.btnWithIcon {
 	align-items: center;
 	justify-content: space-between;
 }
+
+.categoryOption {
+	background-color: var(--lightGrey);
+	padding: 0.5rem;
+	border-radius: 10px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.serviceOption {
+	padding: 0.5rem;
+	border-radius: 10px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background-color: var(--lightertGrey);
+}
+
+.categoryOptionDiv {
+	margin-bottom: 2rem;
+}
+
+.categoryIcon {
+	font-size: 1.5rem;
+}
+
+.allServices {
+	margin-left: 0.5rem;
+	padding: 0.5rem;
+}
+
+.jobEntriesList {
+	background-color: #f8f6f6;
+	margin-left: 0.5rem;
+	padding: 0.5rem;
+	border-radius: 10px;
+}
+
+.jobEntryTitle {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}

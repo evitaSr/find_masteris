@@ -22,20 +22,17 @@ import { IoMdSettings } from 'react-icons/io';
 
 // components:
 import CustomBody from '../../components/customBody';
-
+import { JobEntriesList } from '../../components/jobEntry/jobEntriesList';
 // etc:
 import { UserDetails } from '../../models/fullUser';
 
 export default function Profile() {
 	const { id } = useParams();
+	const navigate = useNavigate();
+
 	const { accessToken, user, authLoaded } = useAuth();
 	const [profile, setProfile] = useState(null);
 	const [categories, setCategories] = useState([]);
-	const [expandedCategory, setExpandedCategory] = useState(null);
-	const [services, setServices] = useState([]);
-	const [selectedService, setSelectedService] = useState(null);
-	const [jobEntries, setJobEntries] = useState([]);
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!authLoaded) {
@@ -84,45 +81,6 @@ export default function Profile() {
 
 		fetchData();
 	}, [id, accessToken, navigate, user, authLoaded]);
-
-	const handleCategoryClick = (categoryId) => {
-		const fetchServices = async () => {
-			try {
-				const response = await api.get(
-					`handyman/${id}/category/${categoryId}/service`
-				);
-				if (response && response.data) {
-					setServices(response.data);
-				}
-			} catch {}
-		};
-		if (categoryId !== expandedCategory) {
-			setServices([]);
-			setSelectedService(null);
-			setJobEntries([]);
-			setExpandedCategory(categoryId);
-			fetchServices();
-		}
-	};
-
-	const handleServiceClick = (serviceId) => {
-		const fetchJobEntries = async () => {
-			try {
-				const response = await api.get(
-					`handyman/${id}/category/${expandedCategory}/service/${serviceId}/job_entry/`
-				);
-				if (response && response.data) {
-					setJobEntries(response.data);
-				}
-			} catch {}
-		};
-		console.log('paspausta ant service');
-		if (serviceId !== selectedService) {
-			setJobEntries([]);
-			setSelectedService(serviceId);
-			fetchJobEntries();
-		}
-	};
 
 	return (
 		<CustomBody>
@@ -218,59 +176,7 @@ export default function Profile() {
 							</Button>
 						)}
 					{profile && profile.role === HANDYMAN && categories && (
-						<div style={{ marginTop: '2rem' }}>
-							{categories.map((category) => (
-								<div
-									key={category.pk}
-									onClick={() =>
-										handleCategoryClick(category.pk)
-									}
-									style={{ cursor: 'pointer' }}
-								>
-									<h3>{category.title}</h3>
-									{expandedCategory === category.pk &&
-										services.map((service) => (
-											<div
-												key={service.pk}
-												onClick={() =>
-													handleServiceClick(
-														service.pk
-													)
-												}
-											>
-												<h5>{service.title}</h5>
-												{selectedService ===
-													service.pk &&
-													jobEntries.map(
-														(jobEntry) => (
-															<div
-																key={
-																	jobEntry.pk
-																}
-															>
-																<p>
-																	{
-																		jobEntry.created_on
-																	}
-																</p>
-																<p>
-																	{
-																		jobEntry.title
-																	}
-																</p>
-																<p>
-																	{
-																		jobEntry.description
-																	}
-																</p>
-															</div>
-														)
-													)}
-											</div>
-										))}
-								</div>
-							))}
-						</div>
+						<JobEntriesList id={id} categories={categories} />
 					)}
 				</div>
 			) : (
