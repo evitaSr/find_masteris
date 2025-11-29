@@ -22,7 +22,7 @@ export function CreateJobEntry() {
 	return (
 		<CustomBody>
 			<h2>Create job entry</h2>
-			<JobEntryForm />
+			<JobEntryForm handymanId={id} />
 		</CustomBody>
 	);
 }
