@@ -5,6 +5,7 @@ import { HANDYMAN } from '../assets/constants/roles';
 // components:
 import CustomBody from '../components/customBody';
 import { Button } from 'react-bootstrap';
+import JobEntryFilter from '../components/homePage/jobEntryFilter';
 
 function App() {
 	const { user } = useAuth();
@@ -13,6 +14,7 @@ function App() {
 	return (
 		<CustomBody>
 			<h1>Home page</h1>
+			<JobEntryFilter />
 			{user && user.role === HANDYMAN && (
 				<Button
 					onClick={() => navigate(`handyman/${user.id}/job_entry/`)}
