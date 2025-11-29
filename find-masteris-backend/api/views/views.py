@@ -309,7 +309,7 @@ class HandymanJobEntriesView(APIView):
         serializer = JobEntrySerializer(job_entries, many=True)
         return Response(serializer.data)
 
-    @swagger_auto_schema(request_body=JobEntrySerializer, tags=['job_entry'])
+    # @swagger_auto_schema(request_body=JobEntrySerializer, tags=['job_entry'])
     def post(self, request, handyman_pk, category_pk, service_pk):
         objs_or_response = get_objs_or_response(handyman_pk, category_pk, service_pk)
         if isinstance(objs_or_response[0], Response):

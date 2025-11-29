@@ -78,11 +78,12 @@ class HandymanSerializer(PasswordHashingSerializer):
     avg_rating = serializers.SerializerMethodField(read_only=True)
     total_count = serializers.SerializerMethodField(read_only=True)
     date_joined = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
+    categories_and_services = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Handyman
         fields = ['pk', 'first_name', 'last_name', 'username', 'password', 'email', 'is_active', 'date_joined',
-                  'contact_email', 'phone_no', 'website', 'avg_rating', 'total_count', 'role']
+                  'contact_email', 'phone_no', 'website', 'avg_rating', 'total_count', 'role', 'categories_and_services']
         extra_kwargs = {
             'password': {'write_only': True},
         }
@@ -93,6 +94,34 @@ class HandymanSerializer(PasswordHashingSerializer):
 
     def get_total_count(self, obj):
         return obj.received_reviews.all().count()
+
+    def get_categories_and_services(self, obj):
+        reviews_data = obj.review_set.select_related("service__category").values("service__id", "service__title",
+                                                                "service__category__id",
+                                                                "service__category__title").distinct()
+        categories = {}
+        for d in reviews_data:
+            category_pk = d['service__category__id']
+            category_title = d['service__category__title']
+            service_pk = d['service__id']
+            service_title = d['service__title']
+
+            if category_pk not in categories:
+                categories[category_pk] = {
+                    'pk': category_pk,
+                    'title': category_title,
+                    'services': [{
+                        'pk': service_pk,
+                        'title': service_title
+                    }],
+                }
+            else:
+                categories[category_pk]['services'].append({
+                    'pk': service_pk,
+                    'title': service_title
+                })
+
+        return list(categories.values())
 
 class JobFileSerializer(serializers.ModelSerializer):
     class Meta:
