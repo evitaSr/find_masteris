@@ -109,8 +109,12 @@ class JobEntrySerializer(serializers.ModelSerializer):
         fields = ['pk', 'title', 'description', 'service', 'handyman', 'uploaded_files', 'files', ]
         read_only_fields = ['service', 'handyman']
 
+    def validate(self, attrs):
+        attrs['uploaded_files'] = self.context.get('uploaded_files', [])
+        return attrs
+
     def create(self, validated_data):
-        files = self.context.get('uploaded_files', [])
+        files = validated_data.pop('uploaded_files', [])
         handyman = self.context['handyman']
         service = self.context['service']
         job_entry = JobEntry.objects.create(handyman=handyman, service=service, **validated_data)

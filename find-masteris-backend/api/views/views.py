@@ -1,6 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_422_UNPROCESSABLE_ENTITY
@@ -290,6 +291,8 @@ class HandymanDetailCategoryServicesView(APIView):
 
 class HandymanJobEntriesView(APIView):
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
     def get_permissions(self):
         if self.request.method == 'GET':
             return [IsAuthenticated()]
