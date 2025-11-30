@@ -346,7 +346,8 @@ class HandymanDetailJobEntriesView(APIView):
         job_entry = get_job_entry_or_response(handyman_pk, category_pk, service_pk, pk)
         if isinstance(job_entry, Response):
             return job_entry
-        if request.auth.get('role', '') != 'admin' and job_entry.handyman != request.user:
+        user_role = request.auth.get('role', '')
+        if user_role != 'admin' and job_entry.handyman.pk != request.user.pk:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         serializer = JobEntrySerializer(job_entry, data=request.data, partial=True,
@@ -361,7 +362,9 @@ class HandymanDetailJobEntriesView(APIView):
         job_entry = get_job_entry_or_response(handyman_pk, category_pk, service_pk, pk)
         if isinstance(job_entry, Response):
             return job_entry
-        if request.auth.get('role', '') != 'admin' and job_entry.handyman != request.user:
+
+        user_role = request.auth.get('role', '')
+        if user_role != 'admin' and job_entry.handyman.pk != request.user.pk:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         job_entry.delete()
