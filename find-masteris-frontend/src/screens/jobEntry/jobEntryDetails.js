@@ -84,20 +84,15 @@ export default function JobEntryDetail() {
 					<h1>{jobEntry.title}</h1>
 					<p>{jobEntry.description}</p>
 					{jobEntry.files.map((file) => (
-						<>
-							{console.log(
-								`${BASE_URL.slice(0, -1)}${file.file}`
-							)}
-							<img
-								key={file.pk}
-								alt="Job entry"
-								src={
-									BASE_URL.endsWith('/')
-										? `${BASE_URL.slice(0, -1)}${file.file}`
-										: `${BASE_URL}${file.file}`
-								}
-							/>
-						</>
+						<img
+							key={file.pk}
+							alt="Job entry"
+							src={
+								BASE_URL.endsWith('/')
+									? `${BASE_URL.slice(0, -1)}${file.file}`
+									: `${BASE_URL}${file.file}`
+							}
+						/>
 					))}
 					{((user.id === id && user.role === HANDYMAN) ||
 						user.role === ADMIN) && (

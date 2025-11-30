@@ -22,7 +22,6 @@
 
 .userTitle {
 	justify-content: space-between;
-	width: 60rem;
 }
 
 .settingsBtn {
@@ -158,4 +157,10 @@ button.btnWithIcon {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+}
+
+.userName {
+	margin-top: 2rem;
+	padding: 0 2rem;
+	width: 100%;
 }

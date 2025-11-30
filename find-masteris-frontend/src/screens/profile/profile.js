@@ -88,7 +88,7 @@ export default function Profile() {
 				<div>
 					<div className="inlineDivStart">
 						<img src={pfp} alt="user profile" />
-						<div style={{ marginTop: '2rem', padding: '0 2rem' }}>
+						<div className="userName">
 							<p className="helper" style={{ marginBottom: 0 }}>
 								{profile.role}
 							</p>

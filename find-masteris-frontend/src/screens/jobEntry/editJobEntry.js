@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAuth } from '../../context/authContext';
 // component:
 import CustomBody from '../../components/customBody';
