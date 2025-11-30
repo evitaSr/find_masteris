@@ -157,7 +157,9 @@ class JobEntrySerializer(serializers.ModelSerializer):
                 continue
 
             try:
-                JobEntryFile.objects.create(job_entry=job_entry, file=file)
+                job_file = JobEntryFile(job_entry=job_entry)
+                job_file.file.save(file.name, file)
+                job_file.save()
                 print(f"Successfully created file entry for {file.name}")
             except Exception as e:
                 print(f"Error creating file entry for {file.name}: {e}")
