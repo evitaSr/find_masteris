@@ -146,10 +146,7 @@ class JobEntrySerializer(serializers.ModelSerializer):
         job_entry = JobEntry.objects.create(handyman=handyman, service=service, **validated_data)
 
         for file in files:
-            if file is None:
-                continue
-            saved_path = default_storage.save(f"job_entry/files/{file.name}", file)
-            JobEntryFile.objects.create(job_entry=job_entry, file=saved_path)
+            JobEntryFile.objects.create(job_entry=job_entry, file=file)
         return job_entry
 
     def update(self, instance, validated_data):
