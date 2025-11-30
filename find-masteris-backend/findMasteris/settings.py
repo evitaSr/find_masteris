@@ -167,6 +167,7 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get('DO_SPACES_BUCKET_NAME', '')
 AWS_S3_ENDPOINT_URL = os.environ.get('DO_SPACES_ENDPOINT_URL1', '')
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_REGION_NAME = os.environ.get('DO_SPACES_REGION', '')
+AWS_DEFAULT_ACL = None
 
 MEDIA_URL = os.environ.get('DO_SPACES_ENDPOINT_URL', '')
 MEDIA_ROOT = None

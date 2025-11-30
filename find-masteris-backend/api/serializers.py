@@ -159,7 +159,8 @@ class JobEntrySerializer(serializers.ModelSerializer):
 
             try:
                 job_file = JobEntryFile(job_entry=job_entry)
-                content = ContentFile(file.read())  # read the bytes
+                content = ContentFile(file.read())
+                print(content)
                 job_file.file.save(file.name, content)
                 print(f"Successfully created file entry for {file.name}")
             except Exception as e:
