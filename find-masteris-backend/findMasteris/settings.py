@@ -19,7 +19,8 @@ from django.core.management.utils import get_random_secret_key
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
-DEBUG = bool(os.environ.get("DEBUG", default=0))
+debug_val = os.environ.get("DEBUG", default=False)
+DEBUG = bool(eval(debug_val)) if isinstance(debug_val, str) else debug_val
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(",")
 
 INSTALLED_APPS = [
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -157,3 +159,10 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = os.environ.get('DO_SPACES_KEY', '')
+AWS_SECRET_ACCESS_KEY = os.environ.get('DO_SPACES_SECRET', '')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('DO_SPACES_BUCKET_NAME', '')
+AWS_S3_ENDPOINT_URL = os.environ.get('DO_SPACES_ENDPOINT_URL', '')
+AWS_DEFAULT_ACL = 'public-read'
