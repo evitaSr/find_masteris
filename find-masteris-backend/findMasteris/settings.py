@@ -144,8 +144,6 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
 }
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 AUTH_USER_MODEL = 'api.FindMasterisUser'
 
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS').split(',')
@@ -166,8 +164,4 @@ AWS_SECRET_ACCESS_KEY = os.environ.get('DO_SPACES_SECRET', '')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('DO_SPACES_BUCKET_NAME', '')
 AWS_S3_ENDPOINT_URL = os.environ.get('DO_SPACES_ENDPOINT_URL', '')
 AWS_DEFAULT_ACL = 'public-read'
-
-print(AWS_ACCESS_KEY_ID)
-print(AWS_SECRET_ACCESS_KEY)
-print(AWS_STORAGE_BUCKET_NAME)
-print(AWS_S3_ENDPOINT_URL)
+AWS_S3_REGION_NAME = os.environ.get('DO_SPACES_REGION', '')
