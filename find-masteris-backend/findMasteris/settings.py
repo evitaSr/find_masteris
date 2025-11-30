@@ -168,5 +168,6 @@ AWS_S3_ENDPOINT_URL = os.environ.get('DO_SPACES_ENDPOINT_URL1', '')
 AWS_S3_REGION_NAME = os.environ.get('DO_SPACES_REGION', '')
 AWS_DEFAULT_ACL = None
 
-MEDIA_URL = os.environ.get('DO_SPACES_ENDPOINT_URL', '')
+media_url = os.environ.get('DO_SPACES_ENDPOINT_URL', '')
+MEDIA_URL = media_url if media_url.endswith('/') else media_url + '/'
 MEDIA_ROOT = None
