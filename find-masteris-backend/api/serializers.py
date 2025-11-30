@@ -145,10 +145,27 @@ class JobEntrySerializer(serializers.ModelSerializer):
         service = self.context['service']
         job_entry = JobEntry.objects.create(handyman=handyman, service=service, **validated_data)
 
-        for file in files:
+        for i, file in enumerate(files):
+            print(f"File {i}: {file}, type: {type(file)}, name: {getattr(file, 'name', 'No name')}")  # Debug log
+
             if file is None:
+                print(f"Skipping file {i} - is None")
                 continue
-            JobEntryFile.objects.create(job_entry=job_entry, file=file)
+
+            if not hasattr(file, 'name') or file.name is None:
+                print(f"Skipping file {i} - no name attribute")
+                continue
+
+            try:
+                JobEntryFile.objects.create(job_entry=job_entry, file=file)
+                print(f"Successfully created file entry for {file.name}")
+            except Exception as e:
+                print(f"Error creating file entry for {file.name}: {e}")
+
+        # for file in files:
+        #     if file is None:
+        #         continue
+        #     JobEntryFile.objects.create(job_entry=job_entry, file=file)
         return job_entry
 
     def update(self, instance, validated_data):
