@@ -88,7 +88,10 @@ class JobEntryFile(models.Model):
         ordering = ['uploaded_at',]
 
     def __str__(self):
-        return self.file.url
+        try:
+            return self.file.name
+        except ValueError:
+            return f'JobEntryFile {self.pk}'
 
 
 class Review(models.Model):
