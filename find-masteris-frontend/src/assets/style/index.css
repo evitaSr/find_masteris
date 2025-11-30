@@ -59,3 +59,9 @@ body,
 .main-content {
 	flex: 1;
 }
+
+.footerDiv {
+	display: inline-flex;
+	width: 90%;
+	justify-content: space-between;
+}

@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { useAuth } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
 import { FaTimes, FaBars } from 'react-icons/fa';
+import { HANDYMAN } from '../assets/constants/roles';
 
 export default function CustomHeader() {
 	const { accessToken, logout, user } = useAuth();
@@ -27,6 +28,9 @@ export default function CustomHeader() {
 				<Link to="/">Find masteris</Link>
 				{accessToken && user && (
 					<Link to={`user/${user.id}/`}>Profile</Link>
+				)}
+				{accessToken && user && user.role === HANDYMAN && (
+					<Link to={`handyman/${user.id}/job_entry/`}>Upload</Link>
 				)}
 				{accessToken ? (
 					<Link onClick={handleLogout}>Logout</Link>

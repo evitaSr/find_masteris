@@ -122,8 +122,10 @@ export default function SignupForm() {
 						<AuthTextInput name="phoneNo" label="Phone number" />
 						<AuthTextInput name="website" label="Website" />
 					</div>
-					<div style={{ marginBottom: '2rem' }}>
-						<label style={{ marginRight: '1rem' }}>Password</label>
+					<div style={{ marginBottom: '1rem' }}>
+						<label style={{ marginRight: '0.5rem' }}>
+							Password
+						</label>
 						<Field
 							name="password"
 							type="password"
@@ -152,7 +154,7 @@ export default function SignupForm() {
 					</div>
 					{error && <Error text={error} />}
 					<div className="alignedBtns">
-						<Button type="submit">Signup</Button>
+						<Button type="submit">Sign up</Button>
 						<div className="alignedBtnsGroup">
 							<p>Already a member?</p>
 							<Button onClick={() => navigate('/login')}>
