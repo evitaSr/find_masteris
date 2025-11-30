@@ -131,11 +131,6 @@ class JobFileSerializer(serializers.ModelSerializer):
 
 
 class JobEntrySerializer(serializers.ModelSerializer):
-    uploaded_files = serializers.ListField(
-        child=serializers.FileField(),
-        write_only=True,
-        required=False
-    )
     files = JobFileSerializer(many=True, read_only=True)
     created_on = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
 
@@ -144,17 +139,15 @@ class JobEntrySerializer(serializers.ModelSerializer):
         fields = ['pk', 'title', 'description', 'service', 'handyman', 'uploaded_files', 'files', 'created_on']
         read_only_fields = ['service', 'handyman']
 
-    def validate(self, attrs):
-        attrs['uploaded_files'] = self.context.get('uploaded_files', [])
-        return attrs
-
     def create(self, validated_data):
-        files = validated_data.pop('uploaded_files', [])
+        files = self.context.get('uploaded_files', [])
         handyman = self.context['handyman']
         service = self.context['service']
         job_entry = JobEntry.objects.create(handyman=handyman, service=service, **validated_data)
 
         for file in files:
+            if file is None:
+                continue
             saved_path = default_storage.save(f"job_entry/files/{file.name}", file)
             JobEntryFile.objects.create(job_entry=job_entry, file=saved_path)
         return job_entry
