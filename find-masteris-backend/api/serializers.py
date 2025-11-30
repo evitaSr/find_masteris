@@ -2,6 +2,7 @@ import os
 from decimal import Decimal
 
 from django.contrib.auth.hashers import make_password, check_password
+from django.core.files.storage import default_storage
 from django.db.models import Avg
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -130,7 +131,11 @@ class JobFileSerializer(serializers.ModelSerializer):
 
 
 class JobEntrySerializer(serializers.ModelSerializer):
-    uploaded_files = serializers.ListSerializer(child=serializers.FileField(), write_only=True, required=False)
+    uploaded_files = serializers.ListField(
+        child=serializers.FileField(),
+        write_only=True,
+        required=False
+    )
     files = JobFileSerializer(many=True, read_only=True)
     created_on = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
 
@@ -150,7 +155,8 @@ class JobEntrySerializer(serializers.ModelSerializer):
         job_entry = JobEntry.objects.create(handyman=handyman, service=service, **validated_data)
 
         for file in files:
-            JobEntryFile.objects.create(job_entry=job_entry, file=file)
+            saved_path = default_storage.save(f"job_entry/files/{file.name}", file)
+            JobEntryFile.objects.create(job_entry=job_entry, file=saved_path)
         return job_entry
 
     def update(self, instance, validated_data):
