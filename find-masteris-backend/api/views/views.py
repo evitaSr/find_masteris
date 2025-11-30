@@ -317,8 +317,8 @@ class HandymanJobEntriesView(APIView):
         handyman, service = objs_or_response
 
         uploaded_files = request.FILES.getlist('uploaded_files')
-        if not uploaded_files and 'uploaded_files' in request.FILES:
-            uploaded_files = [request.FILES['uploaded_files']]
+        uploaded_files = [f for f in uploaded_files if f is not None]
+
         serializer = JobEntrySerializer(data=request.data, context={'handyman': handyman, 'service': service,
                                                                     'uploaded_files': uploaded_files})
         if serializer.is_valid():
