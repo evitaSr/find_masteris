@@ -2,6 +2,7 @@ import os
 from decimal import Decimal
 
 from django.contrib.auth.hashers import make_password, check_password
+from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db.models import Avg
 from rest_framework import serializers
@@ -158,8 +159,8 @@ class JobEntrySerializer(serializers.ModelSerializer):
 
             try:
                 job_file = JobEntryFile(job_entry=job_entry)
-                job_file.file.save(file.name, file)
-                job_file.save()
+                content = ContentFile(file.read())  # read the bytes
+                job_file.file.save(file.name, content)
                 print(f"Successfully created file entry for {file.name}")
             except Exception as e:
                 print(f"Error creating file entry for {file.name}: {e}")
