@@ -159,8 +159,10 @@ class JobEntrySerializer(serializers.ModelSerializer):
 
             try:
                 job_file = JobEntryFile(job_entry=job_entry)
+                file.seek(0)
                 content = ContentFile(file.read())
-                print(content)
+                print(f"Content length: {len(content.read())}")
+                file.seek(0)
                 job_file.file.save(file.name, content)
                 print(f"Successfully created file entry for {file.name}")
             except Exception as e:
