@@ -81,7 +81,9 @@ DATABASES = {
         'HOST': os.getenv('DATABASE_HOST'),
         'PORT': os.getenv('DATABASE_PORT', 3306),
         'OPTIONS': {
-            'ssl': {'ca': os.getenv('DATABASE_CERT')}
+            'ssl': {'ca': os.getenv('DATABASE_CERT')},
+            'charset': 'utf8mb4',
+            'use_unicode': True,
         },
     }
 }
@@ -162,9 +164,9 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_ACCESS_KEY_ID = os.environ.get('DO_SPACES_KEY', '')
 AWS_SECRET_ACCESS_KEY = os.environ.get('DO_SPACES_SECRET', '')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('DO_SPACES_BUCKET_NAME', '')
-AWS_S3_ENDPOINT_URL = os.environ.get('DO_SPACES_ENDPOINT_URL', '')
+AWS_S3_ENDPOINT_URL = os.environ.get('DO_SPACES_ENDPOINT_URL1', '')
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_REGION_NAME = os.environ.get('DO_SPACES_REGION', '')
 
-MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/"
+MEDIA_URL = os.environ.get('DO_SPACES_ENDPOINT_URL', '')
 MEDIA_ROOT = None
