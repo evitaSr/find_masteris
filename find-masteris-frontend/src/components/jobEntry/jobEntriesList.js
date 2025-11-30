@@ -111,7 +111,12 @@ export function JobEntriesList({ id, categories }) {
 															}
 														</p>
 													</div>
-													<p>
+													<p
+														style={{
+															textAlign:
+																'justify',
+														}}
+													>
 														{jobEntry.description
 															.length > 500
 															? jobEntry.description.substring(

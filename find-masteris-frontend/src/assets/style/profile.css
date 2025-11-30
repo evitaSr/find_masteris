@@ -131,6 +131,7 @@ button.btnWithIcon {
 	align-items: center;
 	justify-content: space-between;
 	background-color: var(--lightertGrey);
+	margin-bottom: 1rem;
 }
 
 .categoryOptionDiv {
