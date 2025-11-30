@@ -149,20 +149,17 @@ class JobEntrySerializer(serializers.ModelSerializer):
         for i, file in enumerate(files):
             print(f"File {i}: {file}, type: {type(file)}, name: {getattr(file, 'name', 'No name')}")  # Debug log
 
-            if file is None:
-                print(f"Skipping file {i} - is None")
-                continue
-
-            if not hasattr(file, 'name') or file.name is None:
-                print(f"Skipping file {i} - no name attribute")
+            if file is None or not hasattr(file, 'name') or file.name is None:
+                print(f"Skipping file {i}")
                 continue
 
             try:
-                job_file = JobEntryFile(job_entry=job_entry)
                 file.seek(0)
                 content = ContentFile(file.read())
-                print(f"Content length: {len(content.read())}")
-                file.seek(0)
+                print(f"Content length: {content.size}")
+                content.seek(0)
+
+                job_file = JobEntryFile(job_entry=job_entry)
                 job_file.file.save(file.name, content)
                 print(f"Successfully created file entry for {file.name}")
             except Exception as e:
