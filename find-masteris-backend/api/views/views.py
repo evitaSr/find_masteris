@@ -316,9 +316,11 @@ class HandymanJobEntriesView(APIView):
             return objs_or_response[0]
         handyman, service = objs_or_response
 
+        uploaded_files = request.FILES.getlist('uploaded_files')
+        if not uploaded_files and 'uploaded_files' in request.FILES:
+            uploaded_files = [request.FILES['uploaded_files']]
         serializer = JobEntrySerializer(data=request.data, context={'handyman': handyman, 'service': service,
-                                                                    'uploaded_files': request.FILES.getlist(
-                                                                        'uploaded_files')})
+                                                                    'uploaded_files': uploaded_files})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
