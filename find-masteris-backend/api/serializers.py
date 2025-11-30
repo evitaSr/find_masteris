@@ -136,7 +136,7 @@ class JobEntrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JobEntry
-        fields = ['pk', 'title', 'description', 'service', 'handyman', 'uploaded_files', 'files', 'created_on']
+        fields = ['pk', 'title', 'description', 'service', 'handyman', 'files', 'created_on']
         read_only_fields = ['service', 'handyman']
 
     def create(self, validated_data):
