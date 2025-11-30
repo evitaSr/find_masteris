@@ -5,11 +5,6 @@ host="${DATABASE_HOST}"
 port="${DATABASE_PORT}"
 cmd="$@"
 
-echo "Waiting for MySQL at $host:$port..."
-echo "DATABASE_USER=$DATABASE_USER"
-echo "DATABASE_PASSWORD=$DATABASE_PASSWORD"
-echo "DATABASE_NAME=$DATABASE_NAME"
-
 retry=0
 max_retries=30
 
