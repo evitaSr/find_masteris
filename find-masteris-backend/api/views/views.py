@@ -480,6 +480,9 @@ class RequestToAddCategoryDetailView(EditableByAdminOnlyView):
         serializer = RequestToAddCategorySerializer(obj, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            if not request.data.get('is_rejected', True):
+                Category.objects.create(title=request.data.get('title'))
+
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
@@ -538,6 +541,8 @@ class RequestToAddServiceDetailView(EditableByAdminOnlyView):
         serializer = RequestToAddServiceSerializer(obj, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            if not request.data.get('is_rejected', True):
+                Service.objects.create(title=request.data.get('title'), category_id=request.data.get('category'))
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
