@@ -19,6 +19,9 @@ import EditReviewScreen from './screens/profile/editReview';
 import { CreateJobEntry } from './screens/jobEntry/createJobEntry';
 import JobEntryDetail from './screens/jobEntry/jobEntryDetails';
 import EditJobEntry from './screens/jobEntry/editJobEntry';
+// requests:
+import AddCategoryRequest from './screens/requests/addCategoryRequest';
+import AddServiceRequest from './screens/requests/addServiceRequest';
 // css:
 import './assets/style/customBootstrap.scss';
 import './assets/style/index.css';
@@ -61,7 +64,14 @@ root.render(
 						path="handyman/:id/category/:categoryId/service/:serviceId/job_entry/:jobEntryId/change/"
 						element={<EditJobEntry />}
 					/>
-
+					<Route
+						path="category_request/"
+						element={<AddCategoryRequest />}
+					/>
+					<Route
+						path="service_request/"
+						element={<AddServiceRequest />}
+					/>
 					<Route path="unauthorized/" element={<Unauthorized />} />
 				</Routes>
 			</div>

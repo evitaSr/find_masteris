@@ -16,14 +16,20 @@ header {
 	color: white;
 }
 
-nav a {
+nav a,
+footer a {
 	margin: 0 2rem;
 	color: white;
 	text-decoration: none;
 }
 
-nav a:hover {
+nav a:hover,
+footer a:hover {
 	color: darkgrey;
+}
+
+footer a {
+	display: block;
 }
 
 header .nav-btn {

@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { useAuth } from '../context/authContext';
 import { useNavigate } from 'react-router-dom';
 import { FaTimes, FaBars } from 'react-icons/fa';
-import { HANDYMAN } from '../assets/constants/roles';
+import { ADMIN, HANDYMAN } from '../assets/constants/roles';
 
 export default function CustomHeader() {
 	const { accessToken, logout, user } = useAuth();
@@ -32,6 +32,13 @@ export default function CustomHeader() {
 				{accessToken && user && user.role === HANDYMAN && (
 					<Link to={`handyman/${user.id}/job_entry/`}>Upload</Link>
 				)}
+				{accessToken && user && user.role === ADMIN && (
+					<Link to="/">Category requests</Link>
+				)}
+				{accessToken && user && user.role === ADMIN && (
+					<Link to="/">Service requests</Link>
+				)}
+
 				{accessToken ? (
 					<Link onClick={handleLogout}>Logout</Link>
 				) : (
