@@ -436,7 +436,9 @@ class HandymanReviewDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class RequestToAddCategoryView(EditableByAdminOnlyView):
+class RequestToAddCategoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         objs = RequestToAddCategory.objects.filter(is_rejected=False)
         serializer = RequestToAddCategorySerializer(objs, many=True)
@@ -491,7 +493,9 @@ class RequestToAddCategoryDetailView(EditableByAdminOnlyView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class RequestToAddServiceView(EditableByAdminOnlyView):
+class RequestToAddServiceView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         objs = RequestToAddService.objects.filter(is_rejected=False)
         serializer = RequestToAddServiceSerializer(objs, many=True)

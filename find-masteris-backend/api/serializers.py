@@ -3,7 +3,6 @@ from decimal import Decimal
 
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
 from django.db.models import Avg
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
