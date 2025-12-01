@@ -226,13 +226,13 @@ class RequestSerializer(serializers.ModelSerializer):
 class RequestToAddCategorySerializer(RequestSerializer):
     class Meta:
         model = RequestToAddCategory
-        fields = ['pk', 'requested_by', 'title', 'is_rejected', 'user_full_title']
+        fields = ['pk', 'requested_by', 'title', 'decision', 'user_full_title']
 
 
 class RequestToAddServiceSerializer(RequestSerializer):
     class Meta:
         model = RequestToAddService
-        fields = ['pk', 'requested_by', 'title', 'category', 'is_rejected', 'user_full_title']
+        fields = ['pk', 'requested_by', 'title', 'category', 'decision', 'user_full_title']
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

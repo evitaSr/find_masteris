@@ -440,7 +440,7 @@ class RequestToAddCategoryView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        objs = RequestToAddCategory.objects.filter(is_rejected=False)
+        objs = RequestToAddCategory.objects.filter(decision=0)
         serializer = RequestToAddCategorySerializer(objs, many=True)
         return Response(serializer.data)
 
@@ -480,7 +480,7 @@ class RequestToAddCategoryDetailView(EditableByAdminOnlyView):
         serializer = RequestToAddCategorySerializer(obj, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            if not request.data.get('is_rejected', True):
+            if request.data.get('decision', 0) == 1:
                 Category.objects.create(title=request.data.get('title'))
 
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -500,7 +500,7 @@ class RequestToAddServiceView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        objs = RequestToAddService.objects.filter(is_rejected=False)
+        objs = RequestToAddService.objects.filter(decision=0)
         serializer = RequestToAddServiceSerializer(objs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -541,7 +541,7 @@ class RequestToAddServiceDetailView(EditableByAdminOnlyView):
         serializer = RequestToAddServiceSerializer(obj, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            if not request.data.get('is_rejected', True):
+            if request.data.get('decision', 0) == 1:
                 Service.objects.create(title=request.data.get('title'), category_id=request.data.get('category'))
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

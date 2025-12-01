@@ -114,10 +114,16 @@ class Review(models.Model):
 
 
 class RequestToAdd(models.Model):
+    DECISION_CHOICES = (
+        (0, 'Pending'),
+        (1, 'Accepted'),
+        (2, 'Rejected'),
+    )
+
     requested_by = models.ForeignKey(Handyman, verbose_name=_('Requested by'), on_delete=models.CASCADE,
                                      related_name='category_requests')
     request_sent = models.DateTimeField(verbose_name=_('Request sent at'), default=timezone.now)
-    is_rejected = models.BooleanField(verbose_name=_('Is accepted'), default=False)
+    decision = models.IntegerField(verbose_name=_('Decision state'), default=0, choices=DECISION_CHOICES)
 
 
 class RequestToAddCategory(RequestToAdd):
