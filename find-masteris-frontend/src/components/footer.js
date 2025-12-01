@@ -19,12 +19,12 @@ export default function CustomFooter() {
 					{accessToken && user && user.role === HANDYMAN && (
 						<div>
 							<Link
-								to="/category_request/"
+								to="/category_request/add/"
 								style={{ marginBottom: '1rem' }}
 							>
 								Request to add new category
 							</Link>
-							<Link to="/service_request/">
+							<Link to="/service_request/add/">
 								Request to add new service
 							</Link>
 						</div>

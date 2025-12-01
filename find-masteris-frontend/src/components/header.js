@@ -33,10 +33,10 @@ export default function CustomHeader() {
 					<Link to={`handyman/${user.id}/job_entry/`}>Upload</Link>
 				)}
 				{accessToken && user && user.role === ADMIN && (
-					<Link to="/">Category requests</Link>
+					<Link to="/category_request/">Category requests</Link>
 				)}
 				{accessToken && user && user.role === ADMIN && (
-					<Link to="/">Service requests</Link>
+					<Link to="/service_request/">Service requests</Link>
 				)}
 
 				{accessToken ? (

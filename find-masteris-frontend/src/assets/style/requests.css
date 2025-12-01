@@ -1,0 +1,14 @@
+.choicesBtns {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 30%;
+	margin: 0 auto;
+}
+
+.suggestion {
+	border: 1px solid var(--darkGreen);
+	padding: 1%;
+	border-radius: 10px;
+	margin-bottom: 1rem;
+}

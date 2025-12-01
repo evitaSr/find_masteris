@@ -22,11 +22,14 @@ import EditJobEntry from './screens/jobEntry/editJobEntry';
 // requests:
 import AddCategoryRequest from './screens/requests/addCategoryRequest';
 import AddServiceRequest from './screens/requests/addServiceRequest';
+import CategoryRequestList from './screens/requests/categoryRequestsList';
+import ServiceRequestList from './screens/requests/serviceRequestsList';
 // css:
 import './assets/style/customBootstrap.scss';
 import './assets/style/index.css';
 import './assets/style/headerFooter.css';
 import './assets/style/auth.css';
+import './assets/style/requests.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -65,13 +68,22 @@ root.render(
 						element={<EditJobEntry />}
 					/>
 					<Route
-						path="category_request/"
+						path="category_request/add/"
 						element={<AddCategoryRequest />}
 					/>
 					<Route
-						path="service_request/"
+						path="service_request/add/"
 						element={<AddServiceRequest />}
 					/>
+					<Route
+						path="category_request/"
+						element={<CategoryRequestList />}
+					/>
+					<Route
+						path="service_request/"
+						element={<ServiceRequestList />}
+					/>
+
 					<Route path="unauthorized/" element={<Unauthorized />} />
 				</Routes>
 			</div>

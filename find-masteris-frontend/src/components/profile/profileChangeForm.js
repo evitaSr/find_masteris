@@ -218,7 +218,7 @@ export default function ProfileChangeForm({ id, profile }) {
 						</div>
 					</div>
 				)}
-				{error && <p>{error}</p>}
+				{error && <p className="text-danger">{error}</p>}
 				<br />
 				<Button type="submit">Save</Button>
 			</Form>
