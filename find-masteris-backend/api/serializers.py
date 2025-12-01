@@ -215,16 +215,24 @@ class ReviewSerializer(serializers.ModelSerializer):
         return '%s %s' % (client.first_name, client.last_name) if client.first_name and client.last_name else client.username
 
 
-class RequestToAddCategorySerializer(serializers.ModelSerializer):
+class RequestSerializer(serializers.ModelSerializer):
+    user_full_title = serializers.SerializerMethodField(read_only=True)
+
+    def get_user_full_title(self, obj):
+        client = obj.requested_by
+        return '%s %s' % (client.first_name, client.last_name) if client.first_name and client.last_name else client.username
+
+
+class RequestToAddCategorySerializer(RequestSerializer):
     class Meta:
         model = RequestToAddCategory
-        fields = ['pk', 'requested_by', 'title', 'is_rejected', ]
+        fields = ['pk', 'requested_by', 'title', 'is_rejected', 'user_full_title']
 
 
-class RequestToAddServiceSerializer(serializers.ModelSerializer):
+class RequestToAddServiceSerializer(RequestSerializer):
     class Meta:
         model = RequestToAddService
-        fields = ['pk', 'requested_by', 'title', 'category', 'is_rejected', ]
+        fields = ['pk', 'requested_by', 'title', 'category', 'is_rejected', 'user_full_title']
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
