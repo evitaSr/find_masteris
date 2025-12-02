@@ -1,1095 +1,1288 @@
 swagger: '2.0'
 info:
-  title: FindMasteris
-  description: ''
-  version: v1
+    title: FindMasteris
+    description: ''
+    version: v1
 basePath: /
 consumes:
-- application/json
+    - application/json
 produces:
-- application/json
+    - application/json
 securityDefinitions:
-  Bearer:
-    type: apiKey
-    name: Authorization
-    in: header
+    Bearer:
+        type: apiKey
+        name: Authorization
+        in: header
 security:
-- Bearer: []
+    - Bearer: []
 paths:
-  /category/:
-    get:
-      operationId: category_list
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - category
-    post:
-      operationId: category_create
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/Category'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/Category'
-      tags:
-      - category
-    parameters: []
-  /category/{category_pk}/service/:
-    get:
-      operationId: category_service_list
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - service
-    post:
-      operationId: category_service_create
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/Service'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/Service'
-      tags:
-      - service
-    parameters:
-    - name: category_pk
-      in: path
-      required: true
-      type: string
-  /category/{category_pk}/service/{id}/:
-    get:
-      operationId: category_service_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - service
-    put:
-      operationId: category_service_update
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/Service'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/Service'
-      tags:
-      - service
-    delete:
-      operationId: category_service_delete
-      description: ''
-      parameters: []
-      responses:
-        '204':
-          description: ''
-      tags:
-      - service
-    parameters:
-    - name: category_pk
-      in: path
-      required: true
-      type: string
-    - name: id
-      in: path
-      required: true
-      type: string
-  /category/{id}/:
-    get:
-      operationId: category_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - category
-    put:
-      operationId: category_update
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/Category'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/Category'
-      tags:
-      - category
-    delete:
-      operationId: category_delete
-      description: ''
-      parameters: []
-      responses:
-        '204':
-          description: ''
-      tags:
-      - category
-    parameters:
-    - name: id
-      in: path
-      required: true
-      type: string
-  /category_request/:
-    get:
-      operationId: category_request_list
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - category_request
-    post:
-      operationId: category_request_create
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/RequestToAddCategory'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/RequestToAddCategory'
-      tags:
-      - category_request
-    parameters: []
-  /category_request/{id}/:
-    get:
-      operationId: category_request_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - category_request
-    patch:
-      operationId: category_request_partial_update
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/RequestToAddCategory'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/RequestToAddCategory'
-      tags:
-      - category_request
-    delete:
-      operationId: category_request_delete
-      description: ''
-      parameters: []
-      responses:
-        '204':
-          description: ''
-      tags:
-      - category_request
-    parameters:
-    - name: id
-      in: path
-      required: true
-      type: string
-  /handyman/:
-    get:
-      operationId: handyman_list
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - handyman
-    post:
-      operationId: handyman_create
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/Handyman'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/Handyman'
-      tags:
-      - handyman
-    parameters: []
-  /handyman/{handyman_pk}/category/:
-    get:
-      operationId: handyman_category_list
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - handyman
-    parameters:
-    - name: handyman_pk
-      in: path
-      required: true
-      type: string
-  /handyman/{handyman_pk}/category/{category_pk}/service/:
-    get:
-      operationId: handyman_category_service_list
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - handyman
-    parameters:
-    - name: handyman_pk
-      in: path
-      required: true
-      type: string
-    - name: category_pk
-      in: path
-      required: true
-      type: string
-  /handyman/{handyman_pk}/category/{category_pk}/service/{service_pk}/job_entry/:
-    get:
-      operationId: handyman_category_service_job_entry_list
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      consumes:
-      - multipart/form-data
-      - application/x-www-form-urlencoded
-      tags:
-      - job_entry
-    post:
-      operationId: handyman_category_service_job_entry_create
-      description: ''
-      parameters: []
-      responses:
-        '201':
-          description: ''
-      consumes:
-      - multipart/form-data
-      - application/x-www-form-urlencoded
-      tags:
-      - handyman
-    parameters:
-    - name: handyman_pk
-      in: path
-      required: true
-      type: string
-    - name: category_pk
-      in: path
-      required: true
-      type: string
-    - name: service_pk
-      in: path
-      required: true
-      type: string
-  /handyman/{handyman_pk}/category/{category_pk}/service/{service_pk}/job_entry/{id}/:
-    get:
-      operationId: handyman_category_service_job_entry_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - job_entry
-    patch:
-      operationId: handyman_category_service_job_entry_partial_update
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/JobEntry'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/JobEntry'
-      tags:
-      - job_entry
-    delete:
-      operationId: handyman_category_service_job_entry_delete
-      description: ''
-      parameters: []
-      responses:
-        '204':
-          description: ''
-      tags:
-      - job_entry
-    parameters:
-    - name: handyman_pk
-      in: path
-      required: true
-      type: string
-    - name: category_pk
-      in: path
-      required: true
-      type: string
-    - name: service_pk
-      in: path
-      required: true
-      type: string
-    - name: id
-      in: path
-      required: true
-      type: string
-  /handyman/{handyman_pk}/category/{category_pk}/service/{service_pk}/review/:
-    get:
-      operationId: handyman_category_service_review_list
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - review
-    post:
-      operationId: handyman_category_service_review_create
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/Review'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/Review'
-      tags:
-      - review
-    parameters:
-    - name: handyman_pk
-      in: path
-      required: true
-      type: string
-    - name: category_pk
-      in: path
-      required: true
-      type: string
-    - name: service_pk
-      in: path
-      required: true
-      type: string
-  /handyman/{handyman_pk}/category/{category_pk}/service/{service_pk}/review/{id}/:
-    get:
-      operationId: handyman_category_service_review_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - review
-    patch:
-      operationId: handyman_category_service_review_partial_update
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/Review'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/Review'
-      tags:
-      - review
-    delete:
-      operationId: handyman_category_service_review_delete
-      description: ''
-      parameters: []
-      responses:
-        '204':
-          description: ''
-      tags:
-      - review
-    parameters:
-    - name: handyman_pk
-      in: path
-      required: true
-      type: string
-    - name: category_pk
-      in: path
-      required: true
-      type: string
-    - name: service_pk
-      in: path
-      required: true
-      type: string
-    - name: id
-      in: path
-      required: true
-      type: string
-  /handyman/{id}/:
-    get:
-      operationId: handyman_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - handyman
-    patch:
-      operationId: handyman_partial_update
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/Handyman'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/Handyman'
-      tags:
-      - handyman
-    delete:
-      operationId: handyman_delete
-      description: ''
-      parameters: []
-      responses:
-        '204':
-          description: ''
-      tags:
-      - handyman
-    parameters:
-    - name: id
-      in: path
-      required: true
-      type: string
-  /logout/:
-    post:
-      operationId: logout_create
-      description: ''
-      parameters: []
-      responses:
-        '201':
-          description: ''
-      tags:
-      - logout
-    parameters: []
-  /service_request/:
-    get:
-      operationId: service_request_list
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - service_request
-    post:
-      operationId: service_request_create
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/RequestToAddService'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/RequestToAddService'
-      tags:
-      - service_request
-    parameters: []
-  /service_request/{id}/:
-    get:
-      operationId: service_request_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - service_request
-    patch:
-      operationId: service_request_partial_update
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/RequestToAddService'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/RequestToAddService'
-      tags:
-      - service_request
-    delete:
-      operationId: service_request_delete
-      description: ''
-      parameters: []
-      responses:
-        '204':
-          description: ''
-      tags:
-      - service_request
-    parameters:
-    - name: id
-      in: path
-      required: true
-      type: string
-  /token/:
-    post:
-      operationId: token_create
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/CustomTokenObtainPair'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/CustomTokenObtainPair'
-      tags:
-      - token
-    parameters: []
-  /token/refresh/:
-    post:
-      operationId: token_refresh_create
-      description: |-
-        Takes a refresh type JSON web token and returns an access type JSON web
-        token if the refresh token is valid.
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/TokenRefresh'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/TokenRefresh'
-      tags:
-      - token
-    parameters: []
-  /user/:
-    get:
-      operationId: user_list
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - user
-    post:
-      operationId: user_create
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/User'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/User'
-      tags:
-      - user
-    parameters: []
-  /user/{id}/:
-    get:
-      operationId: user_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-      tags:
-      - user
-    patch:
-      operationId: user_partial_update
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/User'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/User'
-      tags:
-      - user
-    delete:
-      operationId: user_delete
-      description: ''
-      parameters: []
-      responses:
-        '204':
-          description: ''
-      tags:
-      - user
-    parameters:
-    - name: id
-      in: path
-      required: true
-      type: string
-  /user/{id}/password/:
-    put:
-      operationId: user_password_update
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/ChangePassword'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/ChangePassword'
-      tags:
-      - user
-    parameters:
-    - name: id
-      in: path
-      required: true
-      type: string
+    /category/:
+        get:
+            operationId: category_list
+            description: 'Get all categories'
+            parameters: []
+            responses:
+                '200':
+                    description: List of categories
+                '403':
+                    description: Unauthorized
+            tags:
+                - category
+        post:
+            operationId: category_create
+            description: 'Create category'
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Category'
+            responses:
+                '201':
+                    description: Creates category
+                    schema:
+                        $ref: '#/definitions/Category'
+                '400':
+                    description: Invalid input
+                '403':
+                    description: Unauthorized
+            tags:
+                - category
+        parameters: []
+    /category/{category_pk}/service/:
+        get:
+            operationId: category_service_list
+            description: 'Get services of given category'
+            parameters: []
+            responses:
+                '200':
+                    description: 'List of services'
+                '403':
+                    description: Unauthorized
+            tags:
+                - service
+        post:
+            operationId: category_service_create
+            description: 'Create service for given category'
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Service'
+            responses:
+                '201':
+                    description: 'Created service'
+                    schema:
+                        $ref: '#/definitions/Service'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+            tags:
+                - service
+        parameters:
+            - name: category_pk
+              in: path
+              required: true
+              type: string
+    /category/{category_pk}/service/{id}/:
+        get:
+            operationId: category_service_read
+            description: 'Get specific service of given category'
+            parameters: []
+            responses:
+                '200':
+                    description: 'Service'
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+            tags:
+                - service
+        put:
+            operationId: category_service_update
+            description: 'Update service of given category'
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Service'
+            responses:
+                '200':
+                    description: 'Updated service'
+                    schema:
+                        $ref: '#/definitions/Service'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+                '404':
+                    description: Object not found
+            tags:
+                - service
+        delete:
+            operationId: category_service_delete
+            description: 'Deletes service of given category'
+            parameters: []
+            responses:
+                '204':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+            tags:
+                - service
+        parameters:
+            - name: category_pk
+              in: path
+              required: true
+              type: string
+            - name: id
+              in: path
+              required: true
+              type: string
+    /category/{id}/:
+        get:
+            operationId: category_read
+            description: 'Get category'
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+            tags:
+                - category
+        put:
+            operationId: category_update
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Category'
+            responses:
+                '200':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/Category'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+                '404':
+                    description: Object not found
+
+            tags:
+                - category
+        delete:
+            operationId: category_delete
+            description: ''
+            parameters: []
+            responses:
+                '204':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+
+            tags:
+                - category
+        parameters:
+            - name: id
+              in: path
+              required: true
+              type: string
+    /category_request/:
+        get:
+            operationId: category_request_list
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+                '403':
+                    description: Unauthorized
+            tags:
+                - category_request
+        post:
+            operationId: category_request_create
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/RequestToAddCategory'
+            responses:
+                '201':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/RequestToAddCategory'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+            tags:
+                - category_request
+        parameters: []
+    /category_request/{id}/:
+        get:
+            operationId: category_request_read
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+            tags:
+                - category_request
+        patch:
+            operationId: category_request_partial_update
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/RequestToAddCategory'
+            responses:
+                '200':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/RequestToAddCategory'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+                '404':
+                    description: Object not found
+            tags:
+                - category_request
+        delete:
+            operationId: category_request_delete
+            description: ''
+            parameters: []
+            responses:
+                '204':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+
+            tags:
+                - category_request
+        parameters:
+            - name: id
+              in: path
+              required: true
+              type: string
+    /handyman/:
+        get:
+            operationId: handyman_list
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+                '403':
+                    description: Unauthorized
+            tags:
+                - handyman
+        post:
+            operationId: handyman_create
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Handyman'
+            responses:
+                '201':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/Handyman'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+            tags:
+                - handyman
+        parameters: []
+    /handyman/{handyman_pk}/category/:
+        get:
+            operationId: handyman_category_list
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+
+            tags:
+                - handyman
+        parameters:
+            - name: handyman_pk
+              in: path
+              required: true
+              type: string
+    /handyman/{handyman_pk}/category/{category_pk}/service/:
+        get:
+            operationId: handyman_category_service_list
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+            tags:
+                - handyman
+        parameters:
+            - name: handyman_pk
+              in: path
+              required: true
+              type: string
+            - name: category_pk
+              in: path
+              required: true
+              type: string
+    /handyman/{handyman_pk}/category/{category_pk}/service/{service_pk}/job_entry/:
+        get:
+            operationId: handyman_category_service_job_entry_list
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+
+            consumes:
+                - multipart/form-data
+                - application/x-www-form-urlencoded
+            tags:
+                - job_entry
+        post:
+            operationId: handyman_category_service_job_entry_create
+            description: ''
+            parameters: []
+            responses:
+                '201':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+                '404':
+                    description: Object not found
+            consumes:
+                - multipart/form-data
+                - application/x-www-form-urlencoded
+            tags:
+                - handyman
+        parameters:
+            - name: handyman_pk
+              in: path
+              required: true
+              type: string
+            - name: category_pk
+              in: path
+              required: true
+              type: string
+            - name: service_pk
+              in: path
+              required: true
+              type: string
+    /handyman/{handyman_pk}/category/{category_pk}/service/{service_pk}/job_entry/{id}/:
+        get:
+            operationId: handyman_category_service_job_entry_read
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+            tags:
+                - job_entry
+        patch:
+            operationId: handyman_category_service_job_entry_partial_update
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/JobEntry'
+            responses:
+                '200':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/JobEntry'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+                '404':
+                    description: Object not found
+            tags:
+                - job_entry
+        delete:
+            operationId: handyman_category_service_job_entry_delete
+            description: ''
+            parameters: []
+            responses:
+                '204':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+
+            tags:
+                - job_entry
+        parameters:
+            - name: handyman_pk
+              in: path
+              required: true
+              type: string
+            - name: category_pk
+              in: path
+              required: true
+              type: string
+            - name: service_pk
+              in: path
+              required: true
+              type: string
+            - name: id
+              in: path
+              required: true
+              type: string
+    /handyman/{handyman_pk}/category/{category_pk}/service/{service_pk}/review/:
+        get:
+            operationId: handyman_category_service_review_list
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+            tags:
+                - review
+        post:
+            operationId: handyman_category_service_review_create
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Review'
+            responses:
+                '201':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/Review'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+                '404':
+                    description: Object not found
+            tags:
+                - review
+        parameters:
+            - name: handyman_pk
+              in: path
+              required: true
+              type: string
+            - name: category_pk
+              in: path
+              required: true
+              type: string
+            - name: service_pk
+              in: path
+              required: true
+              type: string
+    /handyman/{handyman_pk}/category/{category_pk}/service/{service_pk}/review/{id}/:
+        get:
+            operationId: handyman_category_service_review_read
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+            tags:
+                - review
+        patch:
+            operationId: handyman_category_service_review_partial_update
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Review'
+            responses:
+                '200':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/Review'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+                '404':
+                    description: Object not found
+            tags:
+                - review
+        delete:
+            operationId: handyman_category_service_review_delete
+            description: ''
+            parameters: []
+            responses:
+                '204':
+                    description: ''
+            tags:
+                - review
+        parameters:
+            - name: handyman_pk
+              in: path
+              required: true
+              type: string
+            - name: category_pk
+              in: path
+              required: true
+              type: string
+            - name: service_pk
+              in: path
+              required: true
+              type: string
+            - name: id
+              in: path
+              required: true
+              type: string
+    /handyman/{id}/:
+        get:
+            operationId: handyman_read
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+
+            tags:
+                - handyman
+        patch:
+            operationId: handyman_partial_update
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/Handyman'
+            responses:
+                '200':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/Handyman'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+                '404':
+                    description: Object not found
+            tags:
+                - handyman
+        delete:
+            operationId: handyman_delete
+            description: ''
+            parameters: []
+            responses:
+                '204':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+
+            tags:
+                - handyman
+        parameters:
+            - name: id
+              in: path
+              required: true
+              type: string
+    /logout/:
+        post:
+            operationId: logout_create
+            description: ''
+            parameters: []
+            responses:
+                '201':
+                    description: ''
+            tags:
+                - logout
+        parameters: []
+    /service_request/:
+        get:
+            operationId: service_request_list
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+            tags:
+                - service_request
+        post:
+            operationId: service_request_create
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/RequestToAddService'
+            responses:
+                '201':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/RequestToAddService'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+                '404':
+                    description: Object not found
+
+            tags:
+                - service_request
+        parameters: []
+    /service_request/{id}/:
+        get:
+            operationId: service_request_read
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+            tags:
+                - service_request
+        patch:
+            operationId: service_request_partial_update
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/RequestToAddService'
+            responses:
+                '200':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/RequestToAddService'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+                '404':
+                    description: Object not found
+
+            tags:
+                - service_request
+        delete:
+            operationId: service_request_delete
+            description: ''
+            parameters: []
+            responses:
+                '204':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+
+            tags:
+                - service_request
+        parameters:
+            - name: id
+              in: path
+              required: true
+              type: string
+    /token/:
+        post:
+            operationId: token_create
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/CustomTokenObtainPair'
+            responses:
+                '201':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/CustomTokenObtainPair'
+            tags:
+                - token
+        parameters: []
+    /token/refresh/:
+        post:
+            operationId: token_refresh_create
+            description: |-
+                Takes a refresh type JSON web token and returns an access type JSON web
+                token if the refresh token is valid.
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/TokenRefresh'
+            responses:
+                '201':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/TokenRefresh'
+            tags:
+                - token
+        parameters: []
+    /user/:
+        get:
+            operationId: user_list
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+            tags:
+                - user
+        post:
+            operationId: user_create
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/User'
+            responses:
+                '201':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/User'
+                '400':
+                    description: Invalid input
+            tags:
+                - user
+        parameters: []
+    /user/{id}/:
+        get:
+            operationId: user_read
+            description: ''
+            parameters: []
+            responses:
+                '200':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+
+            tags:
+                - user
+        patch:
+            operationId: user_partial_update
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/User'
+            responses:
+                '200':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/User'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+                '404':
+                    description: Object not found
+
+            tags:
+                - user
+        delete:
+            operationId: user_delete
+            description: ''
+            parameters: []
+            responses:
+                '204':
+                    description: ''
+                '403':
+                    description: Unauthorized
+                '404':
+                    description: Object not found
+
+            tags:
+                - user
+        parameters:
+            - name: id
+              in: path
+              required: true
+              type: string
+    /user/{id}/password/:
+        put:
+            operationId: user_password_update
+            description: ''
+            parameters:
+                - name: data
+                  in: body
+                  required: true
+                  schema:
+                      $ref: '#/definitions/ChangePassword'
+            responses:
+                '200':
+                    description: ''
+                    schema:
+                        $ref: '#/definitions/ChangePassword'
+                '403':
+                    description: Unauthorized
+                '400':
+                    description: Invalid input
+                '404':
+                    description: Object not found
+
+            tags:
+                - user
+        parameters:
+            - name: id
+              in: path
+              required: true
+              type: string
 definitions:
-  Category:
-    required:
-    - title
-    type: object
-    properties:
-      pk:
-        title: ID
-        type: integer
-        readOnly: true
-      title:
-        title: Title
-        type: string
-        maxLength: 100
-        minLength: 1
-  Service:
-    required:
-    - title
-    type: object
-    properties:
-      pk:
-        title: ID
-        type: integer
-        readOnly: true
-      title:
-        title: Title
-        type: string
-        maxLength: 100
-        minLength: 1
-      category:
-        title: Category
-        type: integer
-        readOnly: true
-  RequestToAddCategory:
-    required:
-    - requested_by
-    - title
-    type: object
-    properties:
-      pk:
-        title: ID
-        type: integer
-        readOnly: true
-      requested_by:
-        title: Requested by
-        type: string
-      title:
-        title: Category title
-        type: string
-        maxLength: 100
-        minLength: 1
-      decision:
-        title: Decision state
-        type: integer
-        enum:
-        - 0
-        - 1
-        - 2
-      user_full_title:
-        title: User full title
-        type: string
-        readOnly: true
-      request_sent:
-        title: Request sent
-        type: string
-        format: date-time
-        readOnly: true
-  Handyman:
-    required:
-    - username
-    - password
-    - contact_email
-    type: object
-    properties:
-      pk:
-        title: ID
-        type: integer
-        readOnly: true
-      first_name:
-        title: First name
-        type: string
-        maxLength: 150
-      last_name:
-        title: Last name
-        type: string
-        maxLength: 150
-      username:
-        title: Username
-        description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
-          only.
-        type: string
-        pattern: ^[\w.@+-]+$
-        maxLength: 150
-        minLength: 1
-      password:
-        title: Password
-        type: string
-        maxLength: 128
-        minLength: 1
-      email:
-        title: Email address
-        type: string
-        format: email
-        maxLength: 254
-      is_active:
-        title: Active
-        description: Designates whether this user should be treated as active. Unselect
-          this instead of deleting accounts.
-        type: boolean
-      date_joined:
-        title: Date joined
-        type: string
-        format: date-time
-        readOnly: true
-      contact_email:
-        title: Contact email
-        type: string
-        format: email
-        maxLength: 255
-        minLength: 1
-      phone_no:
-        title: Phone No
-        type: string
-        maxLength: 20
-        x-nullable: true
-      website:
-        title: Website
-        type: string
-        maxLength: 255
-        x-nullable: true
-      avg_rating:
-        title: Avg rating
-        type: string
-        readOnly: true
-      total_count:
-        title: Total count
-        type: string
-        readOnly: true
-      role:
-        title: Role
-        type: string
-        enum:
-        - admin
-        - handyman
-        - client
-        x-nullable: true
-      categories_and_services:
-        title: Categories and services
-        type: string
-        readOnly: true
-  JobFile:
-    type: object
-    properties:
-      pk:
-        title: ID
-        type: integer
-        readOnly: true
-      file:
-        title: File
-        type: string
-        readOnly: true
-        format: uri
-      uploaded_at:
-        title: Uploaded at
-        type: string
-        format: date-time
-        readOnly: true
-  JobEntry:
-    required:
-    - title
-    - description
-    type: object
-    properties:
-      pk:
-        title: ID
-        type: integer
-        readOnly: true
-      title:
-        title: Title
-        type: string
-        maxLength: 100
-        minLength: 1
-      description:
-        title: Description
-        type: string
-        minLength: 1
-      service:
-        title: Service
-        type: integer
-        readOnly: true
-      handyman:
-        title: Handyman
-        type: string
-        readOnly: true
-      files:
-        type: array
-        items:
-          $ref: '#/definitions/JobFile'
-        readOnly: true
-      created_on:
-        title: Created on
-        type: string
-        format: date-time
-        readOnly: true
-  Review:
-    required:
-    - rating
-    - client
-    type: object
-    properties:
-      pk:
-        title: ID
-        type: integer
-        readOnly: true
-      rating:
-        title: Rating
-        type: integer
-        maximum: 5
-        minimum: 1
-      description:
-        title: Description
-        type: string
-        maxLength: 100
-        x-nullable: true
-      created_on:
-        title: Created on
-        type: string
-        format: date-time
-        readOnly: true
-      handyman:
-        title: Handyman
-        type: string
-        readOnly: true
-      service:
-        title: Service
-        type: integer
-        readOnly: true
-      client:
-        title: Client
-        type: integer
-      client_full_title:
-        title: Client full title
-        type: string
-        readOnly: true
-  RequestToAddService:
-    required:
-    - requested_by
-    - title
-    - category
-    type: object
-    properties:
-      pk:
-        title: ID
-        type: integer
-        readOnly: true
-      requested_by:
-        title: Requested by
-        type: string
-      title:
-        title: Service title
-        type: string
-        maxLength: 100
-        minLength: 1
-      category:
-        title: Category
-        type: integer
-      decision:
-        title: Decision state
-        type: integer
-        enum:
-        - 0
-        - 1
-        - 2
-      user_full_title:
-        title: User full title
-        type: string
-        readOnly: true
-      category_title:
-        title: Category title
-        type: string
-        readOnly: true
-      request_sent:
-        title: Request sent
-        type: string
-        format: date-time
-        readOnly: true
-  CustomTokenObtainPair:
-    required:
-    - username
-    - password
-    type: object
-    properties:
-      username:
-        title: Username
-        type: string
-        minLength: 1
-      password:
-        title: Password
-        type: string
-        minLength: 1
-  TokenRefresh:
-    required:
-    - refresh
-    type: object
-    properties:
-      refresh:
-        title: Refresh
-        type: string
-        minLength: 1
-      access:
-        title: Access
-        type: string
-        readOnly: true
-        minLength: 1
-  User:
-    required:
-    - username
-    - password
-    type: object
-    properties:
-      pk:
-        title: ID
-        type: integer
-        readOnly: true
-      first_name:
-        title: First name
-        type: string
-        maxLength: 150
-      last_name:
-        title: Last name
-        type: string
-        maxLength: 150
-      username:
-        title: Username
-        description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
-          only.
-        type: string
-        pattern: ^[\w.@+-]+$
-        maxLength: 150
-        minLength: 1
-      password:
-        title: Password
-        type: string
-        maxLength: 128
-        minLength: 1
-      email:
-        title: Email address
-        type: string
-        format: email
-        maxLength: 254
-      is_active:
-        title: Active
-        description: Designates whether this user should be treated as active. Unselect
-          this instead of deleting accounts.
-        type: boolean
-      date_joined:
-        title: Date joined
-        type: string
-        format: date-time
-        readOnly: true
-      role:
-        title: Role
-        type: string
-        enum:
-        - admin
-        - handyman
-        - client
-        x-nullable: true
-  ChangePassword:
-    required:
-    - new_password
-    type: object
-    properties:
-      old_password:
-        title: Old password
-        type: string
-        minLength: 1
-      new_password:
-        title: New password
-        type: string
-        minLength: 1
+    Category:
+        required:
+            - title
+        type: object
+        properties:
+            pk:
+                title: ID
+                type: integer
+                readOnly: true
+            title:
+                title: Title
+                type: string
+                maxLength: 100
+                minLength: 1
+    Service:
+        required:
+            - title
+        type: object
+        properties:
+            pk:
+                title: ID
+                type: integer
+                readOnly: true
+            title:
+                title: Title
+                type: string
+                maxLength: 100
+                minLength: 1
+            category:
+                title: Category
+                type: integer
+                readOnly: true
+    RequestToAddCategory:
+        required:
+            - requested_by
+            - title
+        type: object
+        properties:
+            pk:
+                title: ID
+                type: integer
+                readOnly: true
+            requested_by:
+                title: Requested by
+                type: string
+            title:
+                title: Category title
+                type: string
+                maxLength: 100
+                minLength: 1
+            decision:
+                title: Decision state
+                type: integer
+                enum:
+                    - 0
+                    - 1
+                    - 2
+            user_full_title:
+                title: User full title
+                type: string
+                readOnly: true
+            request_sent:
+                title: Request sent
+                type: string
+                format: date-time
+                readOnly: true
+    Handyman:
+        required:
+            - username
+            - password
+            - contact_email
+        type: object
+        properties:
+            pk:
+                title: ID
+                type: integer
+                readOnly: true
+            first_name:
+                title: First name
+                type: string
+                maxLength: 150
+            last_name:
+                title: Last name
+                type: string
+                maxLength: 150
+            username:
+                title: Username
+                description:
+                    Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+                    only.
+                type: string
+                pattern: ^[\w.@+-]+$
+                maxLength: 150
+                minLength: 1
+            password:
+                title: Password
+                type: string
+                maxLength: 128
+                minLength: 1
+            email:
+                title: Email address
+                type: string
+                format: email
+                maxLength: 254
+            is_active:
+                title: Active
+                description:
+                    Designates whether this user should be treated as active. Unselect
+                    this instead of deleting accounts.
+                type: boolean
+            date_joined:
+                title: Date joined
+                type: string
+                format: date-time
+                readOnly: true
+            contact_email:
+                title: Contact email
+                type: string
+                format: email
+                maxLength: 255
+                minLength: 1
+            phone_no:
+                title: Phone No
+                type: string
+                maxLength: 20
+                x-nullable: true
+            website:
+                title: Website
+                type: string
+                maxLength: 255
+                x-nullable: true
+            avg_rating:
+                title: Avg rating
+                type: string
+                readOnly: true
+            total_count:
+                title: Total count
+                type: string
+                readOnly: true
+            role:
+                title: Role
+                type: string
+                enum:
+                    - admin
+                    - handyman
+                    - client
+                x-nullable: true
+            categories_and_services:
+                title: Categories and services
+                type: string
+                readOnly: true
+    JobFile:
+        type: object
+        properties:
+            pk:
+                title: ID
+                type: integer
+                readOnly: true
+            file:
+                title: File
+                type: string
+                readOnly: true
+                format: uri
+            uploaded_at:
+                title: Uploaded at
+                type: string
+                format: date-time
+                readOnly: true
+    JobEntry:
+        required:
+            - title
+            - description
+        type: object
+        properties:
+            pk:
+                title: ID
+                type: integer
+                readOnly: true
+            title:
+                title: Title
+                type: string
+                maxLength: 100
+                minLength: 1
+            description:
+                title: Description
+                type: string
+                minLength: 1
+            service:
+                title: Service
+                type: integer
+                readOnly: true
+            handyman:
+                title: Handyman
+                type: string
+                readOnly: true
+            files:
+                type: array
+                items:
+                    $ref: '#/definitions/JobFile'
+                readOnly: true
+            created_on:
+                title: Created on
+                type: string
+                format: date-time
+                readOnly: true
+    Review:
+        required:
+            - rating
+            - client
+        type: object
+        properties:
+            pk:
+                title: ID
+                type: integer
+                readOnly: true
+            rating:
+                title: Rating
+                type: integer
+                maximum: 5
+                minimum: 1
+            description:
+                title: Description
+                type: string
+                maxLength: 100
+                x-nullable: true
+            created_on:
+                title: Created on
+                type: string
+                format: date-time
+                readOnly: true
+            handyman:
+                title: Handyman
+                type: string
+                readOnly: true
+            service:
+                title: Service
+                type: integer
+                readOnly: true
+            client:
+                title: Client
+                type: integer
+            client_full_title:
+                title: Client full title
+                type: string
+                readOnly: true
+    RequestToAddService:
+        required:
+            - requested_by
+            - title
+            - category
+        type: object
+        properties:
+            pk:
+                title: ID
+                type: integer
+                readOnly: true
+            requested_by:
+                title: Requested by
+                type: string
+            title:
+                title: Service title
+                type: string
+                maxLength: 100
+                minLength: 1
+            category:
+                title: Category
+                type: integer
+            decision:
+                title: Decision state
+                type: integer
+                enum:
+                    - 0
+                    - 1
+                    - 2
+            user_full_title:
+                title: User full title
+                type: string
+                readOnly: true
+            category_title:
+                title: Category title
+                type: string
+                readOnly: true
+            request_sent:
+                title: Request sent
+                type: string
+                format: date-time
+                readOnly: true
+    CustomTokenObtainPair:
+        required:
+            - username
+            - password
+        type: object
+        properties:
+            username:
+                title: Username
+                type: string
+                minLength: 1
+            password:
+                title: Password
+                type: string
+                minLength: 1
+    TokenRefresh:
+        required:
+            - refresh
+        type: object
+        properties:
+            refresh:
+                title: Refresh
+                type: string
+                minLength: 1
+            access:
+                title: Access
+                type: string
+                readOnly: true
+                minLength: 1
+    User:
+        required:
+            - username
+            - password
+        type: object
+        properties:
+            pk:
+                title: ID
+                type: integer
+                readOnly: true
+            first_name:
+                title: First name
+                type: string
+                maxLength: 150
+            last_name:
+                title: Last name
+                type: string
+                maxLength: 150
+            username:
+                title: Username
+                description:
+                    Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+                    only.
+                type: string
+                pattern: ^[\w.@+-]+$
+                maxLength: 150
+                minLength: 1
+            password:
+                title: Password
+                type: string
+                maxLength: 128
+                minLength: 1
+            email:
+                title: Email address
+                type: string
+                format: email
+                maxLength: 254
+            is_active:
+                title: Active
+                description:
+                    Designates whether this user should be treated as active. Unselect
+                    this instead of deleting accounts.
+                type: boolean
+            date_joined:
+                title: Date joined
+                type: string
+                format: date-time
+                readOnly: true
+            role:
+                title: Role
+                type: string
+                enum:
+                    - admin
+                    - handyman
+                    - client
+                x-nullable: true
+    ChangePassword:
+        required:
+            - new_password
+        type: object
+        properties:
+            old_password:
+                title: Old password
+                type: string
+                minLength: 1
+            new_password:
+                title: New password
+                type: string
+                minLength: 1
