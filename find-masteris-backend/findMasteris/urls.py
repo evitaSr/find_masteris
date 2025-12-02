@@ -1,16 +1,15 @@
-from django.conf.urls.static import static
 from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
-from findMasteris import settings
 
+api_info = openapi.Info(
+    title='FindMasteris',
+    default_version='v1',
+    description='',
+)
 schema_view = get_schema_view(
-    openapi.Info(
-        title='FindMasteris',
-        default_version='v1',
-        description='',
-    ),
+    api_info,
     public=True,
     url='',
 )

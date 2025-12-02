@@ -151,6 +151,7 @@ AUTH_USER_MODEL = 'api.FindMasterisUser'
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS').split(',')
 
 SWAGGER_SETTINGS = {
+    'DEFAULT_INFO': 'findMasteris.urls.api_info',
     'SECURITY_DEFINITIONS': {
         'Bearer': {
             'type': 'apiKey',
