@@ -69,30 +69,31 @@ export default function CategoryRequestList() {
 			{error && <p className="text-danger">{error}</p>}
 
 			{requests && requests.length > 0 ? (
-				<p>
-					{requests.map((request) => (
-						<div key={request.pk} className="suggestion">
+				requests.map((request) => (
+					<div key={request.pk} className="suggestion">
+						<div className="title">
 							<p>Requested by: {request.user_full_title}</p>
-							<p>
-								Suggested title:{' '}
-								<span style={{ fontWeight: 'bold' }}>
-									{request.title}
-								</span>
-							</p>
-							<div className="choicesBtns">
-								<Button onClick={() => handleAccept(request)}>
-									Accept
-								</Button>
-								<Button
-									variant="danger"
-									onClick={() => handleReject(request)}
-								>
-									Reject
-								</Button>
-							</div>
+							<p>{request.request_sent}</p>
 						</div>
-					))}
-				</p>
+						<p>
+							Suggested title:{' '}
+							<span style={{ fontWeight: 'bold' }}>
+								{request.title}
+							</span>
+						</p>
+						<div className="choicesBtns">
+							<Button onClick={() => handleAccept(request)}>
+								Accept
+							</Button>
+							<Button
+								variant="danger"
+								onClick={() => handleReject(request)}
+							>
+								Reject
+							</Button>
+						</div>
+					</div>
+				))
 			) : (
 				<p>No requests</p>
 			)}

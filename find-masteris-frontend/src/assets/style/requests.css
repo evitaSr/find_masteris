@@ -12,3 +12,8 @@
 	border-radius: 10px;
 	margin-bottom: 1rem;
 }
+
+.title {
+	display: flex;
+	justify-content: space-between;
+}
