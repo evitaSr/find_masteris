@@ -41,3 +41,7 @@ Administratorius galės:
 6. Valdyti visus atsiliepimus;
 7. Valdyti gautas užklausas dėl kategorijų;
 8. Valdyti gautas užklausas dėl kategorijos paslaugų;
+
+## Deployment diagrama
+<img width="1020" height="444" alt="image" src="https://github.com/user-attachments/assets/164634f7-a595-46a9-90c5-1d48d172af7d" />
+Sistema talpinama „Linux“ serveryje. Kiekviena sistemos dalis bus tame pačiame serveryje. Internetinė aplikacija yra pasiekiama per HTTPS protokolą. Naršyklė per „nginx“ kreipsis į „React“. „React“ kreipsis į per „Gunicorn“ paleistą „Django Rest Framework“ API. API komunikuoja TCP/IP protokolu su „MySql“ serveriu.
