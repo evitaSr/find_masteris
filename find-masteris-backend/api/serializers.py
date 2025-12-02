@@ -217,6 +217,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class RequestSerializer(serializers.ModelSerializer):
     user_full_title = serializers.SerializerMethodField(read_only=True)
+    request_sent = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
 
     def get_user_full_title(self, obj):
         client = obj.requested_by
@@ -226,13 +227,19 @@ class RequestSerializer(serializers.ModelSerializer):
 class RequestToAddCategorySerializer(RequestSerializer):
     class Meta:
         model = RequestToAddCategory
-        fields = ['pk', 'requested_by', 'title', 'decision', 'user_full_title']
+        fields = ['pk', 'requested_by', 'title', 'decision', 'user_full_title', 'request_sent']
 
 
 class RequestToAddServiceSerializer(RequestSerializer):
+    category_title = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = RequestToAddService
-        fields = ['pk', 'requested_by', 'title', 'category', 'decision', 'user_full_title']
+        fields = ['pk', 'requested_by', 'title', 'category', 'decision', 'user_full_title', 'category_title',
+                  'request_sent']
+
+    def get_category_title(self, obj):
+        return obj.category.title
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
